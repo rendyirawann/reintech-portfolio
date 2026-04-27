@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>REINTECH | Digital Universe Creator</title>
     <meta name="description" content="Full-Stack Developer & Tech Creator based in Indonesia. Crafting high-performance digital experiences.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    {{-- Fonts loaded via app.css (Archivo + Space Grotesk) from MASTER.md design system --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
