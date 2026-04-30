@@ -46,21 +46,21 @@ class PortfolioSeeder extends Seeder
         // Projects
         Project::create([
             'year' => '2024',
-            'type' => 'SaaS Platform',
+            'category' => 'SaaS Platform',
             'title' => 'Nexus Dashboard',
-            'description' => 'A high-performance analytics dashboard for crypto traders with real-time data visualization.',
-            'tags' => ['React', 'D3.js', 'Firebase'],
-            'link' => '#',
-            'order' => 1
+            'short_description' => 'A high-performance analytics dashboard for crypto traders with real-time data visualization.',
+            'tech_stack' => ['React', 'D3.js', 'Firebase'],
+            'live_url' => '#',
+            'sort_order' => 1
         ]);
         Project::create([
             'year' => '2023',
-            'type' => 'Mobile App',
+            'category' => 'Mobile App',
             'title' => 'Pulse Health',
-            'description' => 'AI-driven fitness companion that tracks biomechanics using smartphone cameras.',
-            'tags' => ['Flutter', 'TensorFlow', 'Go'],
-            'link' => '#',
-            'order' => 2
+            'short_description' => 'AI-driven fitness companion that tracks biomechanics using smartphone cameras.',
+            'tech_stack' => ['Flutter', 'TensorFlow', 'Go'],
+            'live_url' => '#',
+            'sort_order' => 2
         ]);
 
         // Services

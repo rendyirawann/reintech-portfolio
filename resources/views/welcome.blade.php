@@ -53,18 +53,12 @@
     <div class="sidebar-divider"></div>
 
     <div class="sidebar-social">
-        <a href="https://github.com" target="_blank" class="social-link" data-label="GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            <span class="nav-label">GitHub</span>
+        @foreach($socials as $social)
+        <a href="{{ $social->url }}" target="_blank" class="social-link" data-label="{{ $social->label }}">
+            {!! $social->icon_svg !!}
+            <span class="nav-label">{{ $social->label }}</span>
         </a>
-        <a href="https://linkedin.com" target="_blank" class="social-link" data-label="LinkedIn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            <span class="nav-label">LinkedIn</span>
-        </a>
-        <a href="https://instagram.com" target="_blank" class="social-link" data-label="Instagram">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            <span class="nav-label">Instagram</span>
-        </a>
+        @endforeach
     </div>
 </aside>
 
@@ -74,10 +68,10 @@
 <header class="topbar" id="topbar">
     <div class="topbar-left">
         <span class="topbar-status"></span>
-        <span class="topbar-available">Available for projects</span>
+        <span class="topbar-available">{{ $identity->topbar_status_text }}</span>
     </div>
     <div class="topbar-right">
-        <span class="topbar-pill">💻 Full-Stack Dev</span>
+        <span class="topbar-pill">💻 {{ $identity->topbar_role_text }}</span>
         <button class="theme-toggle" onclick="window.toggleTheme()" id="theme-toggle" aria-label="Toggle Theme">
             <span id="theme-icon">☀️</span>
         </button>
@@ -89,22 +83,19 @@
 ================================================ --}}
 <main class="main-content">
 
-    {{-- 🏠 HERO --}}
+    @if(isset($sections['hero']) && $sections['hero']->is_visible)
     <section class="section hero" id="hero" data-section>
         <canvas class="section-canvas" id="hero-canvas"></canvas>
         <div class="hero-glow-1"></div>
         <div class="hero-glow-2"></div>
         <div class="hero-glow-3"></div>
         <div class="section-inner hero-inner">
-            <div class="hero-badge">Full-Stack Developer & Digital Creator</div>
+            <div class="hero-badge">{{ $sections['hero']->subtitle }}</div>
             <h1 class="hero-title">
-                I Build<br>
-                <span class="gradient-text">Digital Things</span><br>
-                That Matter
+                {{ $sections['hero']->title }}
             </h1>
             <p class="hero-desc">
-                Crafting high-performance web apps, mobile experiences,<br>
-                and stunning digital solutions from Indonesia.
+                {{ $sections['hero']->description }}
             </p>
             <div class="hero-cta">
                 <a href="#projects" class="btn-primary">Explore My Work →</a>
@@ -128,13 +119,18 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 👤 ABOUT — DNA Canvas --}}
+    @if(isset($sections['about']) && $sections['about']->is_visible)
     <section class="section" id="about" data-section>
         <canvas class="section-canvas" id="about-canvas"></canvas>
         <div class="section-inner">
-            <div class="section-tag reveal">About Me</div>
-            <h2 class="section-title reveal">The Mind Behind<br>The Code</h2>
+            <div class="section-tag reveal">{{ $sections['about']->subtitle }}</div>
+            <h2 class="section-title reveal">{{ $sections['about']->title }}</h2>
+            <div style="margin-bottom: 2rem; color: var(--text-muted); max-width: 800px;" class="reveal">
+                {{ $sections['about']->description }}
+            </div>
             <div class="about-grid">
                 <div class="about-card reveal">
                     <div class="about-icon">🚀</div>
@@ -154,89 +150,72 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 🚀 PROJECTS — Matrix Rain Canvas --}}
+    @if(isset($sections['projects']) && $sections['projects']->is_visible)
     <section class="section" id="projects" data-section>
         <canvas class="section-canvas" id="projects-canvas"></canvas>
         <div class="section-inner">
-            <div class="section-tag reveal">My Work</div>
-            <h2 class="section-title reveal">Selected Projects &<br>Case Studies</h2>
+            <div class="section-tag reveal">{{ $sections['projects']->subtitle }}</div>
+            <h2 class="section-title reveal">{{ $sections['projects']->title }}</h2>
+            <div style="margin-bottom: 2rem; color: var(--text-muted); max-width: 800px;" class="reveal">
+                {{ $sections['projects']->description }}
+            </div>
             <div class="projects-grid">
-                <div class="project-card reveal">
-                    <div class="project-thumb" style="background: linear-gradient(135deg, #0a0620 0%, #1a0f40 50%, #0f2020 100%);">
-                        <div class="project-thumb-icon">🏛️</div>
+                @foreach($projects as $project)
+                <div class="project-card reveal" onclick="openProjectModal({{ $project->id }})">
+                    <div class="project-thumb" style="background-image: url('{{ $project->main_image ? Storage::url($project->main_image) : '' }}'); background-size: cover; background-position: center;">
+                        @if(!$project->main_image)
+                        <div class="project-thumb-icon">📁</div>
+                        @endif
                         <div class="project-thumb-glow" style="background: radial-gradient(circle, rgba(124,92,252,0.3), transparent 70%)"></div>
                     </div>
                     <div class="project-info">
                         <div class="project-meta">
-                            <span class="project-year">2024</span>
-                            <span class="project-type">Government System</span>
+                            <span class="project-year">{{ $project->year }}</span>
+                            <span class="project-type">{{ $project->category }}</span>
                         </div>
-                        <h3 class="project-title">Perizinan Deli Serdang</h3>
-                        <p class="project-desc">Sistem manajemen perizinan terpadu dengan tanda tangan digital (TTE), alur multi-level approval, dan dashboard analytics real-time untuk instansi pemerintah Kabupaten Deli Serdang.</p>
+                        <h3 class="project-title">{{ $project->title }}</h3>
+                        <p class="project-desc">{{ $project->short_description }}</p>
                         <div class="project-tags">
-                            <span class="project-tag">Laravel 10</span>
-                            <span class="project-tag">PostgreSQL</span>
-                            <span class="project-tag">Bootstrap 5</span>
-                            <span class="project-tag">Digital TTE</span>
+                            @foreach($project->tech_stack ?? [] as $tech)
+                            <span class="project-tag">{{ $tech }}</span>
+                            @endforeach
                         </div>
-                        <a href="#contact" class="project-link">View Case Study →</a>
+                        <span class="project-link">View Case Study →</span>
                     </div>
                 </div>
-
-                <div class="project-card reveal">
-                    <div class="project-thumb" style="background: linear-gradient(135deg, #020a14 0%, #0a2040 50%, #041020 100%);">
-                        <div class="project-thumb-icon">🚗</div>
-                        <div class="project-thumb-glow" style="background: radial-gradient(circle, rgba(56,189,248,0.3), transparent 70%)"></div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-year">2024</span>
-                            <span class="project-type">Fleet Management</span>
-                        </div>
-                        <h3 class="project-title">Fleet Tracker App</h3>
-                        <p class="project-desc">Aplikasi tracking armada kendaraan real-time yang di-deploy di Ubuntu server dengan backend PostgreSQL, dilengkapi dashboard monitoring dan laporan perjalanan otomatis.</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Laravel 12</span>
-                            <span class="project-tag">PostgreSQL</span>
-                            <span class="project-tag">Ubuntu VPS</span>
-                            <span class="project-tag">Nginx</span>
-                        </div>
-                        <a href="#contact" class="project-link">View Case Study →</a>
-                    </div>
-                </div>
-
-                <div class="project-card reveal">
-                    <div class="project-thumb" style="background: linear-gradient(135deg, #140a00 0%, #301800 50%, #1a1000 100%);">
-                        <div class="project-thumb-icon">🍽️</div>
-                        <div class="project-thumb-glow" style="background: radial-gradient(circle, rgba(251,146,60,0.3), transparent 70%)"></div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-year">2024</span>
-                            <span class="project-type">Restaurant POS</span>
-                        </div>
-                        <h3 class="project-title">Kitchen Management System</h3>
-                        <p class="project-desc">Sistem POS dapur terintegrasi dengan perhitungan HPP otomatis, laporan penjualan per menu, dan dashboard financial analytics untuk manajemen restoran.</p>
-                        <div class="project-tags">
-                            <span class="project-tag">Laravel</span>
-                            <span class="project-tag">MySQL</span>
-                            <span class="project-tag">Alpine.js</span>
-                            <span class="project-tag">HPP Calc</span>
-                        </div>
-                        <a href="#contact" class="project-link">View Case Study →</a>
-                    </div>
-                </div>
+                
+                {{-- Data template for modal --}}
+                <template id="project-data-{{ $project->id }}">
+                    {!! json_encode([
+                        'title' => $project->title,
+                        'category' => $project->category,
+                        'year' => $project->year,
+                        'long_description' => $project->long_description,
+                        'tech_stack' => $project->tech_stack,
+                        'live_url' => $project->live_url,
+                        'repo_url' => $project->repo_url,
+                        'images' => $project->images->map(fn($img) => Storage::url($img->image_path))
+                    ]) !!}
+                </template>
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     {{-- 💼 SERVICES — Circuit Canvas --}}
+    @if(isset($sections['services']) && $sections['services']->is_visible)
     <section class="section" id="services" data-section>
         <canvas class="section-canvas" id="services-canvas"></canvas>
         <div class="section-inner">
-            <div class="section-tag reveal">What I Do</div>
-            <h2 class="section-title reveal">Services &<br>Capabilities</h2>
+            <div class="section-tag reveal">{{ $sections['services']->subtitle }}</div>
+            <h2 class="section-title reveal">{{ $sections['services']->title }}</h2>
+            <div style="margin-bottom: 2rem; color: var(--text-muted); max-width: 800px;" class="reveal">
+                {{ $sections['services']->description }}
+            </div>
             <div class="services-grid">
                 <div class="service-card reveal">
                     <div class="service-icon">💻</div>
@@ -265,15 +244,17 @@
             </div>
         </div>
     </section>
+    @endif
 
     {{-- ✉️ CONTACT — Wormhole Canvas --}}
+    @if(isset($sections['contact']) && $sections['contact']->is_visible)
     <section class="section" id="contact" data-section>
         <canvas class="section-canvas" id="contact-canvas"></canvas>
         <div class="section-inner">
-            <div class="section-tag reveal">Get In Touch</div>
-            <h2 class="section-title reveal">Let's Build<br>Something Together</h2>
+            <div class="section-tag reveal">{{ $sections['contact']->subtitle }}</div>
+            <h2 class="section-title reveal">{{ $sections['contact']->title }}</h2>
             <div class="contact-wrapper reveal">
-                <p class="contact-sub">Have a project in mind or want to discuss opportunities?</p>
+                <p class="contact-sub">{{ $sections['contact']->description }}</p>
                 <a href="mailto:hello@reintech.dev" class="contact-email">hello@reintech.dev</a>
                 <div class="contact-cta">
                     <a href="mailto:hello@reintech.dev" class="btn-primary">Send Email →</a>
@@ -282,16 +263,21 @@
             </div>
         </div>
     </section>
+    @endif
 
     <footer class="footer">
-        <span>© 2026 Rendy — Built with ❤️ & Laravel</span>
-        <span class="footer-brand">rdev.tech</span>
+        <span>© {{ date('Y') }} {{ $identity->logo_subtext }}</span>
+        <span class="footer-brand">{{ $identity->logo_subtext }}</span>
     </footer>
 
 </main>
 
 {{-- FLOATING LOGO BOTTOM RIGHT --}}
-<div class="floating-logo" id="floating-logo">RD</div>
+@if($identity->sidebar_icon_type === 'image' && $identity->sidebar_icon_value)
+    <div class="floating-logo" id="floating-logo" style="background-image: url('{{ Storage::url($identity->sidebar_icon_value) }}'); background-size: cover; background-position: center; color: transparent;"></div>
+@else
+    <div class="floating-logo" id="floating-logo">{{ $identity->sidebar_icon_value }}</div>
+@endif
 
 {{-- MOBILE BOTTOM TAB BAR --}}
 <nav class="mobile-tab-bar">
@@ -316,6 +302,104 @@
         <span>Contact</span>
     </a>
 </nav>
+
+{{-- PROJECT MODAL OVERLAY --}}
+<div id="project-modal" class="project-modal">
+    <div class="project-modal-backdrop" onclick="closeProjectModal()"></div>
+    <div class="project-modal-content">
+        <button class="project-modal-close" onclick="closeProjectModal()">×</button>
+        <div class="project-modal-body">
+            <h2 id="modal-title" style="margin-bottom: 0.5rem; font-size: 2rem;"></h2>
+            <div style="color: var(--text-muted); margin-bottom: 1rem;">
+                <span id="modal-year"></span> • <span id="modal-category"></span>
+            </div>
+            
+            <div id="modal-tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;"></div>
+            
+            <div id="modal-desc" style="line-height: 1.6; margin-bottom: 2rem;"></div>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 3rem;">
+                <a id="modal-live" href="#" target="_blank" class="btn-primary" style="display: none;">Live Site</a>
+                <a id="modal-repo" href="#" target="_blank" class="btn-ghost" style="display: none;">Repository</a>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">Gallery</h3>
+            <div id="modal-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .project-modal { position: fixed; inset: 0; z-index: 99999; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+    .project-modal.active { display: flex; opacity: 1; }
+    .project-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); }
+    .project-modal-content { position: relative; background: var(--bg); width: 90%; max-width: 900px; max-height: 90vh; border-radius: 12px; border: 1px solid var(--border); overflow-y: auto; z-index: 1; transform: translateY(20px); transition: transform 0.3s; }
+    .project-modal.active .project-modal-content { transform: translateY(0); }
+    .project-modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .project-modal-body { padding: 3rem 2rem; }
+</style>
+
+<script>
+    function openProjectModal(id) {
+        const dataStr = document.getElementById('project-data-' + id).innerHTML;
+        const data = JSON.parse(dataStr);
+        
+        document.getElementById('modal-title').innerText = data.title;
+        document.getElementById('modal-year').innerText = data.year || '';
+        document.getElementById('modal-category').innerText = data.category || '';
+        document.getElementById('modal-desc').innerHTML = data.long_description ? data.long_description.replace(/\n/g, '<br>') : '';
+        
+        const tagsContainer = document.getElementById('modal-tags');
+        tagsContainer.innerHTML = '';
+        if (data.tech_stack) {
+            data.tech_stack.forEach(tech => {
+                const span = document.createElement('span');
+                span.className = 'project-tag';
+                span.innerText = tech;
+                tagsContainer.appendChild(span);
+            });
+        }
+
+        const liveBtn = document.getElementById('modal-live');
+        if (data.live_url) {
+            liveBtn.href = data.live_url;
+            liveBtn.style.display = 'inline-block';
+        } else {
+            liveBtn.style.display = 'none';
+        }
+
+        const repoBtn = document.getElementById('modal-repo');
+        if (data.repo_url) {
+            repoBtn.href = data.repo_url;
+            repoBtn.style.display = 'inline-block';
+        } else {
+            repoBtn.style.display = 'none';
+        }
+
+        const galleryContainer = document.getElementById('modal-gallery');
+        galleryContainer.innerHTML = '';
+        if (data.images && data.images.length > 0) {
+            data.images.forEach(imgUrl => {
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.style.width = '100%';
+                img.style.borderRadius = '8px';
+                img.style.border = '1px solid var(--border)';
+                galleryContainer.appendChild(img);
+            });
+        } else {
+            galleryContainer.innerHTML = '<p style="color: var(--text-muted);">No gallery images available.</p>';
+        }
+
+        document.body.style.overflow = 'hidden';
+        document.getElementById('project-modal').classList.add('active');
+    }
+
+    function closeProjectModal() {
+        document.getElementById('project-modal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+</script>
 
 </body>
 </html>

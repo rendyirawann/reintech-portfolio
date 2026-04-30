@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Service提升 extends Model
+class Service extends Model
 {
-    //
+    protected $fillable = ['icon', 'title', 'description', 'price', 'order'];
 }

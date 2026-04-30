@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+    --dev-bg: #f8fafc;
+    --dev-surface: #ffffff;
+    --dev-text: #0f172a;
+    --dev-text-muted: #64748b;
+    --dev-accent: #2563eb;
+    --dev-accent-hover: #1d4ed8;
+    --dev-border: #e2e8f0;
+}
+
+:root[data-dev-theme="dark"] {
+    --dev-bg: #0f172a;
+    --dev-surface: #1e293b;
+    --dev-text: #f8fafc;
+    --dev-text-muted: #94a3b8;
+    --dev-accent: #3b82f6;
+    --dev-accent-hover: #60a5fa;
+    --dev-border: #334155;
+}
+
+body {
+    background-color: var(--dev-bg);
+    color: var(--dev-text);
+    font-family: 'Inter', system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dev-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dev-card {
+    background-color: var(--dev-surface);
+    border: 1px solid var(--dev-border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dev-input {
+    background-color: var(--dev-bg);
+    color: var(--dev-text);
+    border: 1px solid var(--dev-border);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    width: 100%;
+}
+
+.dev-input:focus {
+    outline: none;
+    border-color: var(--dev-accent);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.dev-btn {
+    background-color: var(--dev-accent);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+}
+
+.dev-btn:hover {
+    background-color: var(--dev-accent-hover);
+}
+
+.dev-btn-danger {
+    background-color: #ef4444;
+}
+
+.dev-btn-danger:hover {
+    background-color: #dc2626;
+}
+
+.dev-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dev-table th, .dev-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--dev-border);
+    text-align: left;
+}
+
+.dev-table th {
+    font-weight: 600;
+    color: var(--dev-text-muted);
+}
