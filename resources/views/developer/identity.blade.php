@@ -60,6 +60,23 @@
             <input type="file" id="sidebar_icon_image" name="sidebar_icon_image" class="dev-input" accept="image/*">
         </div>
 
+        <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--dev-border); padding-bottom: 0.5rem;">Contact & Footer</h3>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="contact_email" style="display: block; margin-bottom: 0.5rem; color: var(--dev-text-muted);">Contact Email (Visible in Contact Section)</label>
+            <input type="email" id="contact_email" name="contact_email" class="dev-input" value="{{ old('contact_email', $identity->contact_email) }}">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="contact_whatsapp" style="display: block; margin-bottom: 0.5rem; color: var(--dev-text-muted);">WhatsApp Number (e.g. 6281234567890)</label>
+            <input type="text" id="contact_whatsapp" name="contact_whatsapp" class="dev-input" value="{{ old('contact_whatsapp', $identity->contact_whatsapp) }}">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 2rem;">
+            <label for="footer_text" style="display: block; margin-bottom: 0.5rem; color: var(--dev-text-muted);">Footer Text</label>
+            <input type="text" id="footer_text" name="footer_text" class="dev-input" value="{{ old('footer_text', $identity->footer_text) }}">
+        </div>
+
         <button type="submit" class="dev-btn">Save Identity Settings</button>
     </form>
 </div>

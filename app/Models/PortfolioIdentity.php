@@ -15,6 +15,9 @@ class PortfolioIdentity extends Model
         'topbar_role_text',
         'sidebar_icon_type',
         'sidebar_icon_value',
+        'contact_email',
+        'contact_whatsapp',
+        'footer_text',
     ];
 
     /**
@@ -29,6 +32,9 @@ class PortfolioIdentity extends Model
             'topbar_role_text'   => 'Full Stack Dev',
             'sidebar_icon_type'  => 'text',
             'sidebar_icon_value' => 'RD',
+            'contact_email'      => 'hello@reintech.dev',
+            'contact_whatsapp'   => '6281234567890',
+            'footer_text'        => 'Built with ❤️ & Laravel',
         ]);
     }
 }

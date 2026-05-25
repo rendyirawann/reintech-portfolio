@@ -28,6 +28,9 @@ class DeveloperIdentityController extends Controller
             'sidebar_icon_type'  => 'required|in:text,image',
             'sidebar_icon_value_text' => 'required_if:sidebar_icon_type,text|string|max:10',
             'sidebar_icon_image' => 'required_if:sidebar_icon_type,image|image|max:2048',
+            'contact_email'      => 'nullable|string|email|max:100',
+            'contact_whatsapp'   => 'nullable|string|max:50',
+            'footer_text'        => 'nullable|string|max:255',
         ]);
 
         $identity->fill([
@@ -36,6 +39,9 @@ class DeveloperIdentityController extends Controller
             'topbar_status_text' => $validated['topbar_status_text'],
             'topbar_role_text'   => $validated['topbar_role_text'],
             'sidebar_icon_type'  => $validated['sidebar_icon_type'],
+            'contact_email'      => $validated['contact_email'],
+            'contact_whatsapp'   => $validated['contact_whatsapp'],
+            'footer_text'        => $validated['footer_text'],
         ]);
 
         if ($validated['sidebar_icon_type'] === 'text') {
@@ -66,7 +72,7 @@ class DeveloperIdentityController extends Controller
         $validated = $request->validate([
             'platform'   => 'required|string|max:50',
             'label'      => 'required|string|max:100',
-            'url'        => 'required|url|max:500',
+            'url'        => 'required|string|max:500',
             'icon_svg'   => 'required|string',
             'sort_order' => 'required|integer',
         ]);
@@ -83,7 +89,7 @@ class DeveloperIdentityController extends Controller
         $validated = $request->validate([
             'platform'   => 'required|string|max:50',
             'label'      => 'required|string|max:100',
-            'url'        => 'required|url|max:500',
+            'url'        => 'required|string|max:500',
             'icon_svg'   => 'required|string',
             'sort_order' => 'required|integer',
         ]);

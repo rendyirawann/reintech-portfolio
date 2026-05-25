@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AboutCard extends Model
+class ServiceItem extends Model
 {
     protected $fillable = [
         'icon',
         'title',
         'description',
+        'price_text',
         'sort_order',
         'is_visible',
     ];

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AboutCard extends Model
+class HeroStat extends Model
 {
     protected $fillable = [
-        'icon',
-        'title',
-        'description',
+        'counter_value',
+        'suffix',
+        'label',
         'sort_order',
         'is_visible',
     ];

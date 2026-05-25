@@ -102,20 +102,13 @@
                 <a href="#contact" class="btn-ghost">Let's Talk</a>
             </div>
             <div class="hero-stats">
+                @foreach($heroStats as $stat)
+                @if(!$loop->first)<div class="stat-divider"></div>@endif
                 <div class="stat-item">
-                    <span class="stat-num counter" data-target="24">0</span><span class="stat-suffix">+</span>
-                    <span class="stat-label">Projects</span>
+                    <span class="stat-num counter" data-target="{{ $stat->counter_value }}">0</span><span class="stat-suffix">{{ $stat->suffix }}</span>
+                    <span class="stat-label">{{ $stat->label }}</span>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-num counter" data-target="6">0</span><span class="stat-suffix">+</span>
-                    <span class="stat-label">Years Exp</span>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-num counter" data-target="18">0</span><span class="stat-suffix">+</span>
-                    <span class="stat-label">Clients</span>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -132,21 +125,13 @@
                 {{ $sections['about']->description }}
             </div>
             <div class="about-grid">
+                @foreach($aboutCards as $card)
                 <div class="about-card reveal">
-                    <div class="about-icon">🚀</div>
-                    <h3>Builder</h3>
-                    <p>I turn ideas into fast, beautiful, production-ready applications that real users love.</p>
+                    <div class="about-icon">{{ $card->icon }}</div>
+                    <h3>{{ $card->title }}</h3>
+                    <p>{{ $card->description }}</p>
                 </div>
-                <div class="about-card reveal">
-                    <div class="about-icon">🎨</div>
-                    <h3>Designer-Dev</h3>
-                    <p>Strong aesthetic sense combined with technical depth — I bridge design and engineering seamlessly.</p>
-                </div>
-                <div class="about-card reveal">
-                    <div class="about-icon">⚡</div>
-                    <h3>Optimizer</h3>
-                    <p>Performance-obsessed. Every millisecond and pixel matters in what I ship.</p>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -217,30 +202,16 @@
                 {{ $sections['services']->description }}
             </div>
             <div class="services-grid">
+                @foreach($serviceItems as $item)
                 <div class="service-card reveal">
-                    <div class="service-icon">💻</div>
-                    <h3 class="service-title">Web Development</h3>
-                    <p class="service-desc">Full-stack web apps built with Laravel, React, Vue.js — from MVP to production-grade enterprise systems.</p>
-                    <div class="service-price">From IDR 5jt</div>
+                    <div class="service-icon">{{ $item->icon }}</div>
+                    <h3 class="service-title">{{ $item->title }}</h3>
+                    <p class="service-desc">{{ $item->description }}</p>
+                    @if($item->price_text)
+                    <div class="service-price">{{ $item->price_text }}</div>
+                    @endif
                 </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">📱</div>
-                    <h3 class="service-title">Mobile Apps</h3>
-                    <p class="service-desc">Cross-platform mobile applications with seamless UX across Android and iOS using modern frameworks.</p>
-                    <div class="service-price">From IDR 8jt</div>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">🏛️</div>
-                    <h3 class="service-title">Government Systems</h3>
-                    <p class="service-desc">Specialized experience building secure, auditable e-government platforms with TTE, SPBE compliance.</p>
-                    <div class="service-price">Custom Quote</div>
-                </div>
-                <div class="service-card reveal">
-                    <div class="service-icon">🚀</div>
-                    <h3 class="service-title">Tech Consulting</h3>
-                    <p class="service-desc">Architecture review, stack selection, performance optimization, and DevOps setup for your team.</p>
-                    <div class="service-price">IDR 500k/hr</div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -255,10 +226,10 @@
             <h2 class="section-title reveal">{{ $sections['contact']->title }}</h2>
             <div class="contact-wrapper reveal">
                 <p class="contact-sub">{{ $sections['contact']->description }}</p>
-                <a href="mailto:hello@reintech.dev" class="contact-email">hello@reintech.dev</a>
+                <a href="mailto:{{ $identity->contact_email }}" class="contact-email">{{ $identity->contact_email }}</a>
                 <div class="contact-cta">
-                    <a href="mailto:hello@reintech.dev" class="btn-primary">Send Email →</a>
-                    <a href="https://wa.me/6281234567890" target="_blank" class="btn-ghost">WhatsApp</a>
+                    <a href="mailto:{{ $identity->contact_email }}" class="btn-primary">Send Email →</a>
+                    <a href="https://wa.me/{{ $identity->contact_whatsapp }}" target="_blank" class="btn-ghost">WhatsApp</a>
                 </div>
             </div>
         </div>
@@ -266,7 +237,7 @@
     @endif
 
     <footer class="footer">
-        <span>© {{ date('Y') }} {{ $identity->logo_subtext }}</span>
+        <span>© {{ date('Y') }} {{ $identity->logo_subtext }} — {{ $identity->footer_text }}</span>
         <span class="footer-brand">{{ $identity->logo_subtext }}</span>
     </footer>
 

@@ -39,6 +39,21 @@ Route::prefix('developer-access')->name('developer.')->middleware('developer.aut
     Route::put('/sections/{id}', [DeveloperSectionController::class, 'update'])->name('sections.update');
     Route::post('/sections/{id}/toggle', [DeveloperSectionController::class, 'toggle'])->name('sections.toggle');
 
+    // Hero Stats (child of hero section)
+    Route::post('/sections/hero-stats',           [DeveloperSectionController::class, 'storeHeroStat'])->name('sections.hero-stats.store');
+    Route::put('/sections/hero-stats/{id}',       [DeveloperSectionController::class, 'updateHeroStat'])->name('sections.hero-stats.update');
+    Route::delete('/sections/hero-stats/{id}',    [DeveloperSectionController::class, 'destroyHeroStat'])->name('sections.hero-stats.destroy');
+
+    // About Cards (child of about section)
+    Route::post('/sections/about-cards',          [DeveloperSectionController::class, 'storeAboutCard'])->name('sections.about-cards.store');
+    Route::put('/sections/about-cards/{id}',      [DeveloperSectionController::class, 'updateAboutCard'])->name('sections.about-cards.update');
+    Route::delete('/sections/about-cards/{id}',   [DeveloperSectionController::class, 'destroyAboutCard'])->name('sections.about-cards.destroy');
+
+    // Service Items (child of services section)
+    Route::post('/sections/service-items',        [DeveloperSectionController::class, 'storeServiceItem'])->name('sections.service-items.store');
+    Route::put('/sections/service-items/{id}',    [DeveloperSectionController::class, 'updateServiceItem'])->name('sections.service-items.update');
+    Route::delete('/sections/service-items/{id}', [DeveloperSectionController::class, 'destroyServiceItem'])->name('sections.service-items.destroy');
+
     // Projects
     Route::get('/projects',            [DeveloperProjectController::class, 'index'])->name('projects');
     Route::get('/projects/create',     [DeveloperProjectController::class, 'create'])->name('projects.create');
