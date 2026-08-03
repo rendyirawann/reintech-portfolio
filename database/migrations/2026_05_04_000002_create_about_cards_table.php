@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists("about_cards"); // canonical about_cards (with is_visible) must win
         Schema::create('about_cards', function (Blueprint $table) {
             $table->id();
             $table->string('icon', 20);
