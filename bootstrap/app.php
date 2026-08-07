@@ -11,6 +11,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Header keamanan (HSTS, CSP, X-Frame-Options, dll) untuk seluruh respons.
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->alias([
             'developer.auth' => \App\Http\Middleware\DeveloperAuth::class,
         ]);
