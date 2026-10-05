@@ -11,7 +11,7 @@ class DeveloperAuth
     public function handle(Request $request, Closure $next): Response
     {
         if (!session()->has('developer_id')) {
-            return redirect()->route('developer.login')
+            return redirect()->route('admin.login')
                 ->with('error', 'Access denied. Please log in.');
         }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Developer;
 
 use App\Http\Controllers\Controller;
 use App\Models\PortfolioIdentity;
+use App\Services\MediaService;
 use App\Models\SocialLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,10 @@ class DeveloperIdentityController extends Controller
     {
         $identity = PortfolioIdentity::instance();
         return view('developer.identity', compact('identity'));
+    }
+
+    public function __construct(private readonly MediaService $media)
+    {
     }
 
     public function update(Request $request)
@@ -30,7 +35,22 @@ class DeveloperIdentityController extends Controller
             'sidebar_icon_image' => 'required_if:sidebar_icon_type,image|image|max:2048',
             'contact_email'      => 'nullable|string|email|max:100',
             'contact_whatsapp'   => 'nullable|string|max:50',
+            'contact_linkedin'   => 'nullable|url|max:500',
             'footer_text'        => 'nullable|string|max:255',
+
+            // Data diri — dipakai bagian Tentang dan dokumen ekspor
+            'full_name'          => 'nullable|string|max:120',
+            'headline'           => 'nullable|string|max:160',
+            'summary'            => 'nullable|string|max:3000',
+            'languages'          => 'nullable|string|max:255',
+            'location'           => 'nullable|string|max:120',
+            'profile_image'      => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+
+            // SEO
+            'meta_title'         => 'nullable|string|max:255',
+            'meta_description'   => 'nullable|string|max:320',
+            'meta_keywords'      => 'nullable|string|max:500',
+            'og_image'           => 'nullable|image|mimes:jpeg,png,webp|max:2048',
         ]);
 
         $identity->fill([
@@ -40,9 +60,30 @@ class DeveloperIdentityController extends Controller
             'topbar_role_text'   => $validated['topbar_role_text'],
             'sidebar_icon_type'  => $validated['sidebar_icon_type'],
             'contact_email'      => $validated['contact_email'],
-            'contact_whatsapp'   => $validated['contact_whatsapp'],
+            'contact_whatsapp'   => (string) ($validated['contact_whatsapp'] ?? ''),
             'footer_text'        => $validated['footer_text'],
+            'contact_linkedin'   => $validated['contact_linkedin'] ?? null,
+            'full_name'          => $validated['full_name'] ?? null,
+            'headline'           => $validated['headline'] ?? null,
+            'summary'            => $validated['summary'] ?? null,
+            'languages'          => $validated['languages'] ?? null,
+            'location'           => $validated['location'] ?? null,
+            'meta_title'         => $validated['meta_title'] ?? null,
+            'meta_description'   => $validated['meta_description'] ?? null,
+            'meta_keywords'      => $validated['meta_keywords'] ?? null,
         ]);
+
+        // Kedua gambar lewat MediaService: terkompres, dan nama berkasnya
+        // dibangkitkan ulang sehingga tidak bisa ditentukan pengunggah.
+        foreach (['profile_image', 'og_image'] as $kolom) {
+            if ($request->hasFile($kolom)) {
+                $this->media->hapus($identity->{$kolom});
+                $identity->{$kolom} = $this->media->simpanGambar(
+                    $request->file($kolom),
+                    'portfolio/identity'
+                );
+            }
+        }
 
         if ($validated['sidebar_icon_type'] === 'text') {
             $identity->sidebar_icon_value = $validated['sidebar_icon_value_text'];
@@ -56,7 +97,7 @@ class DeveloperIdentityController extends Controller
 
         $identity->save();
 
-        return redirect()->route('developer.identity')->with('success', 'Identity updated successfully.');
+        return redirect()->route('admin.identity')->with('success', 'Identity updated successfully.');
     }
 
     // --- Social Links ---
@@ -73,13 +114,15 @@ class DeveloperIdentityController extends Controller
             'platform'   => 'required|string|max:50',
             'label'      => 'required|string|max:100',
             'url'        => 'required|string|max:500',
-            'icon_svg'   => 'required|string',
+            // Tidak lagi wajib: ikon dirakit dari platform hasil pengenalan URL.
+            // Kolomnya dipertahankan agar data lama tidak perlu dimigrasi.
+            'icon_svg'   => 'nullable|string|max:5000',
             'sort_order' => 'required|integer',
         ]);
 
         SocialLink::create($validated);
 
-        return redirect()->route('developer.identity.socials')->with('success', 'Social link added.');
+        return redirect()->route('admin.identity.socials')->with('success', 'Social link added.');
     }
 
     public function updateSocial(Request $request, $id)
@@ -90,19 +133,21 @@ class DeveloperIdentityController extends Controller
             'platform'   => 'required|string|max:50',
             'label'      => 'required|string|max:100',
             'url'        => 'required|string|max:500',
-            'icon_svg'   => 'required|string',
+            // Tidak lagi wajib: ikon dirakit dari platform hasil pengenalan URL.
+            // Kolomnya dipertahankan agar data lama tidak perlu dimigrasi.
+            'icon_svg'   => 'nullable|string|max:5000',
             'sort_order' => 'required|integer',
         ]);
 
         $social->update($validated);
 
-        return redirect()->route('developer.identity.socials')->with('success', 'Social link updated.');
+        return redirect()->route('admin.identity.socials')->with('success', 'Social link updated.');
     }
 
     public function destroySocial($id)
     {
         SocialLink::findOrFail($id)->delete();
-        return redirect()->route('developer.identity.socials')->with('success', 'Social link deleted.');
+        return redirect()->route('admin.identity.socials')->with('success', 'Social link deleted.');
     }
 
     public function toggleSocial($id)

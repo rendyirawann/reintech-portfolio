@@ -1,0 +1,83 @@
+/*
+ * Animasi pembuka dashboard (sekali setelah login).
+ * Dimuat HANYA saat ?welcome=1, bersama reveal.js.
+ *
+ * Latar overlay sama dengan latar halaman login (#05070d), sehingga
+ * perpindahan dari login ke dashboard terbaca sebagai satu gerakan utuh.
+ */
+
+#app-reveal {
+    --app-reveal-bg: #05070d;
+    --app-reveal-tile: #0c1322;
+    --app-reveal-p1: #22d3ee;
+    --app-reveal-p2: #3b82f6;
+
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    pointer-events: none;
+    background: var(--app-reveal-bg);
+    opacity: 1;
+    transition: opacity 340ms ease;
+    /* Cadangan: bila JavaScript tidak jalan, overlay tetap menyingkir. */
+    animation: app-reveal-failsafe 500ms 1400ms forwards;
+}
+
+#app-reveal.is-clearing {
+    opacity: 0;
+}
+
+@keyframes app-reveal-failsafe {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Tahap 1 — latar pecah menjadi ubin yang beterbangan. */
+#app-reveal .app-reveal__grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    /* Celah 2px memperlihatkan latar, sehingga dinding ubinnya terlihat
+       sebelum pecah. */
+    gap: 2px;
+}
+
+#app-reveal .app-reveal__tile {
+    will-change: transform, opacity;
+    transform-origin: center;
+    animation: app-tile-out var(--app-tile-dur, 460ms) cubic-bezier(.5, 0, .75, 0) both;
+}
+
+@keyframes app-tile-out {
+    0% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: blur(0);
+    }
+    35% {
+        opacity: 1;
+        transform: scale(1.03) rotate(var(--app-tile-rot, 4deg));
+    }
+    100% {
+        opacity: 0;
+        transform: scale(.25) rotate(var(--app-tile-rot, 4deg)) translate3d(var(--app-tile-x, 0), var(--app-tile-y, -40px), 0);
+        filter: blur(3px);
+    }
+}
+
+/* Tahap 2-4 — satu kanvas. */
+#app-reveal .app-reveal__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #app-reveal .app-reveal__tile {
+        animation-duration: 1ms !important;
+    }
+}

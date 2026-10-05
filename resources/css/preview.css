@@ -1,0 +1,158 @@
+/*
+ * Panel pratinjau langsung di halaman admin.
+ * Dimuat HANYA oleh halaman yang menyertakan komponen pratinjau.
+ */
+
+/* Tata letak dua kolom: formulir di kiri, pratinjau lengket di kanan. */
+.pf-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.pf-layout > .pf-preview {
+    position: sticky;
+    top: 84px;
+}
+
+@media (max-width: 991.98px) {
+    .pf-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .pf-layout > .pf-preview {
+        position: static;
+    }
+}
+
+.pf-preview {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--dev-border);
+    border-radius: var(--dev-radius);
+    background: var(--dev-surface);
+    box-shadow: var(--dev-shadow);
+    overflow: hidden;
+}
+
+/* Siku HUD, sama dengan kartu-kartu lain. */
+.pf-preview::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+    border-top: 2px solid color-mix(in srgb, var(--dev-accent-2) 70%, transparent);
+    border-left: 2px solid color-mix(in srgb, var(--dev-accent-2) 70%, transparent);
+    border-top-left-radius: 8px;
+    pointer-events: none;
+}
+
+.pf-preview__bar {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .6rem .8rem;
+    border-bottom: 1px solid var(--dev-border);
+    background: var(--dev-surface-2);
+}
+
+.pf-preview__dots {
+    display: flex;
+    gap: 5px;
+}
+
+.pf-preview__dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--dev-border);
+}
+
+.pf-preview__dots i:nth-child(1) { background: #f87171; }
+.pf-preview__dots i:nth-child(2) { background: #fbbf24; }
+.pf-preview__dots i:nth-child(3) { background: #34d399; }
+
+.pf-preview__title {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    font-family: var(--dev-mono, ui-monospace, monospace);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--dev-text-muted);
+}
+
+.pf-preview__title svg {
+    width: 15px;
+    height: 15px;
+    color: var(--dev-accent-2);
+}
+
+.pf-preview__tools {
+    display: flex;
+    gap: .35rem;
+    margin-left: auto;
+}
+
+.pf-preview__btn {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--dev-border);
+    border-radius: 8px;
+    background: var(--dev-surface);
+    color: var(--dev-text-muted);
+    cursor: pointer;
+    transition: color 160ms ease, border-color 160ms ease;
+}
+
+.pf-preview__btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.pf-preview__btn:hover,
+.pf-preview__btn.is-active {
+    color: var(--dev-text);
+    border-color: var(--dev-accent);
+}
+
+.pf-preview__stage {
+    position: relative;
+    height: min(72vh, 720px);
+    overflow: hidden;
+    background: #05070d;
+}
+
+.pf-preview__stage iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    background: #05070d;
+    transform-origin: 0 0;
+}
+
+/* Mode ponsel: bingkai di tengah, dengan tepi seperti perangkat. */
+.pf-preview__stage.is-mobile iframe {
+    left: 50%;
+    transform-origin: 50% 0;
+    translate: -50% 0;
+    box-shadow: 0 0 0 1px var(--dev-border);
+}
+
+.pf-preview__hint {
+    margin: 0;
+    padding: .6rem .9rem;
+    border-top: 1px solid var(--dev-border);
+    font-size: .76rem;
+    color: var(--dev-text-muted);
+}

@@ -1,0 +1,138 @@
+/*
+ * Gaya kotak unggah. Dimuat HANYA oleh halaman yang memakainya
+ * (form proyek), lewat @push('page-styles').
+ *
+ * Warnanya mengambil variabel panel admin yang sudah ada, bukan nilai baru,
+ * supaya ganti tema di satu tempat ikut mengubah komponen ini.
+ */
+
+.unggah-kotak {
+    position: relative;
+    border: 1.5px dashed var(--dev-border, #2b3448);
+    border-radius: 12px;
+    background: var(--dev-surface, #18202f);
+    padding: 22px 18px;
+    cursor: pointer;
+    transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.unggah-kotak:hover,
+.unggah-kotak.unggah-terpilih {
+    border-color: var(--color-accent-cta, #3b82f6);
+}
+
+.unggah-kotak.unggah-aktif {
+    border-color: var(--color-accent-cta, #3b82f6);
+    background: color-mix(in srgb, var(--color-accent-cta, #3b82f6) 10%, transparent);
+}
+
+.unggah-ajakan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    color: var(--dev-text-muted, #94a3b8);
+}
+
+.unggah-ajakan svg {
+    width: 28px;
+    height: 28px;
+    color: var(--color-accent-cta, #3b82f6);
+}
+
+.unggah-ajakan strong {
+    color: var(--dev-text, #e9edf8);
+    font-size: 0.95rem;
+}
+
+.unggah-ajakan span {
+    font-size: 0.82rem;
+}
+
+.unggah-ajakan small {
+    font-size: 0.72rem;
+    opacity: 0.75;
+}
+
+.unggah-pesan {
+    margin: 10px 0 0;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--color-accent-cta, #3b82f6);
+    min-height: 1em;
+}
+
+.unggah-daftar {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.unggah-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px;
+    border: 1px solid var(--dev-border, #2b3448);
+    border-radius: 9px;
+    background: var(--dev-bg, #0f1421);
+    min-width: 0;
+}
+
+.unggah-item img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex: none;
+}
+
+.unggah-ikon {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--color-accent-cta, #3b82f6) 18%, transparent);
+    color: var(--color-accent-cta, #3b82f6);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.unggah-teks {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.unggah-teks strong {
+    font-size: 0.78rem;
+    color: var(--dev-text, #e9edf8);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.unggah-teks span {
+    font-size: 0.7rem;
+    color: var(--dev-text-muted, #94a3b8);
+}
+
+/* Baris tautan ganda pada formulir proyek. */
+.tautan-baris {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+@media (max-width: 640px) {
+    .tautan-baris {
+        grid-template-columns: 1fr;
+    }
+}

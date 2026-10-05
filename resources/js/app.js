@@ -50,6 +50,13 @@ const initSidebar = () => {
 ============================================ */
 const initPreloader = () => {
     const overlay  = document.getElementById('preloader');
+    // Di pratinjau admin preloader disembunyikan CSS; jangan kunci gulir.
+    if (document.documentElement.classList.contains('is-preview')) {
+        if (overlay) overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        initScrollAnimations();
+        return;
+    }
     const canvas   = document.getElementById('preloader-canvas');
     const enterBtn = document.getElementById('enter-btn');
     if (!overlay || !canvas) return;
@@ -71,7 +78,7 @@ const initPreloader = () => {
     }));
 
     // Nebula blobs
-    const nebula = Array.from({ length: 80 }, () => ({
+    const nebula = Array.from({ length: KECIL ? 36 : 70 }, () => ({
         x: Math.random() * W, y: Math.random() * H,
         r: Math.random() * 80 + 20, a: Math.random() * 0.04 + 0.01,
         dx: (Math.random() - .5) * .35, dy: (Math.random() - .5) * .35,
@@ -148,6 +155,47 @@ const initPreloader = () => {
 };
 
 /* ============================================
+   PENJADWAL KANVAS — hemat CPU
+   Setiap kanvas hanya menggambar saat terlihat di layar dan tab aktif.
+   Di layar kecil / perangkat lemah dibatasi ±30 fps.
+============================================ */
+const KECIL = window.matchMedia('(max-width: 1100px)').matches || (navigator.hardwareConcurrency || 8) <= 4;
+const HEMAT = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const JEDA_FRAME = KECIL ? 1000 / 30 : 0;
+const tampak = new WeakMap();      // kanvas -> sedang terlihat?
+const tertunda = new Map();        // kanvas -> fungsi gambar yang menunggu terlihat
+const terakhir = new WeakMap();
+
+const pengamatKanvas = 'IntersectionObserver' in window ? new IntersectionObserver((entri) => {
+    entri.forEach((e) => {
+        tampak.set(e.target, e.isIntersecting);
+        if (e.isIntersecting && tertunda.has(e.target)) {
+            const gambar = tertunda.get(e.target);
+            tertunda.delete(e.target);
+            requestAnimationFrame(gambar);
+        }
+    });
+}, { rootMargin: '100px 0px' }) : null;
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) return;
+    tertunda.forEach((gambar, kanvas) => {
+        if (tampak.get(kanvas) !== false) { tertunda.delete(kanvas); requestAnimationFrame(gambar); }
+    });
+});
+
+function lanjut(kanvas, gambar) {
+    if (!tampak.has(kanvas)) { tampak.set(kanvas, true); pengamatKanvas?.observe(kanvas); }
+    if (HEMAT || document.hidden || tampak.get(kanvas) === false) { tertunda.set(kanvas, gambar); return; }
+    if (!JEDA_FRAME) { requestAnimationFrame(gambar); return; }
+    requestAnimationFrame((t) => {
+        if (t - (terakhir.get(kanvas) || 0) < JEDA_FRAME) { lanjut(kanvas, gambar); return; }
+        terakhir.set(kanvas, t);
+        gambar(t);
+    });
+}
+
+/* ============================================
    HERO CANVAS — Orbs + DNA Helix + Network + Dust
    (12:49 AM Full Rich Triple Layer)
 ============================================ */
@@ -184,7 +232,7 @@ const initHeroCanvas = () => {
     }));
 
     // LAYER 3: Ambient dust (120 tiny)
-    const dust = Array.from({ length: 120 }, () => ({
+    const dust = Array.from({ length: KECIL ? 50 : 100 }, () => ({
         x: Math.random() * canvas.width,  y: Math.random() * canvas.height,
         r: Math.random() * 1.2 + .2,
         dx: (Math.random() - .5) * .2,    dy: (Math.random() - .5) * .2,
@@ -197,7 +245,7 @@ const initHeroCanvas = () => {
         tick++;
         const W = canvas.width; const H = canvas.height;
         ctx.clearRect(0, 0, W, H);
-        const col = isDark() ? '124,92,252' : '100,70,220';
+        const col = isDark() ? '34, 211, 238' : '100,70,220';
 
         // Draw orbs
         orbs.forEach(o => {
@@ -223,9 +271,9 @@ const initHeroCanvas = () => {
             const x2 = cx - Math.sin(t) * amp;
             const sz = Math.abs(3 + Math.cos(t) * 2);
             ctx.beginPath(); ctx.arc(x1, y1, sz, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(124,92,252,${0.12 + Math.cos(t)*0.06})`; ctx.fill();
+            ctx.fillStyle = `rgba(34, 211, 238,${0.12 + Math.cos(t)*0.06})`; ctx.fill();
             ctx.beginPath(); ctx.arc(x2, y1, sz, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(252,92,160,${0.10 + Math.sin(t)*0.05})`; ctx.fill();
+            ctx.fillStyle = `rgba(59, 130, 246,${0.10 + Math.sin(t)*0.05})`; ctx.fill();
             if (i % 5 === 0) {
                 ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y1);
                 ctx.strokeStyle = `rgba(92,244,252,0.06)`; ctx.lineWidth = 1; ctx.stroke();
@@ -243,10 +291,10 @@ const initHeroCanvas = () => {
             ctx.beginPath(); ctx.arc(x1, y1, sz, 0, Math.PI*2);
             ctx.fillStyle = `rgba(92,244,252,${0.10 + Math.cos(t)*0.05})`; ctx.fill();
             ctx.beginPath(); ctx.arc(x2, y1, sz, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(124,92,252,${0.08 + Math.sin(t)*0.04})`; ctx.fill();
+            ctx.fillStyle = `rgba(34, 211, 238,${0.08 + Math.sin(t)*0.04})`; ctx.fill();
             if (i % 5 === 0) {
                 ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y1);
-                ctx.strokeStyle = `rgba(252,92,160,0.05)`; ctx.lineWidth = 1; ctx.stroke();
+                ctx.strokeStyle = `rgba(59, 130, 246,0.05)`; ctx.lineWidth = 1; ctx.stroke();
             }
         }
 
@@ -279,7 +327,7 @@ const initHeroCanvas = () => {
             ctx.fillStyle = `rgba(255,255,255,${p.alpha})`; ctx.fill();
         });
 
-        requestAnimationFrame(draw);
+        lanjut(canvas, draw);
     };
     draw();
 };
@@ -302,15 +350,15 @@ const initAboutCanvas = () => {
             const x2 = W/2 - Math.sin(t) * 80;
             const sz = Math.abs(4 + Math.cos(t) * 2);
             ctx.beginPath(); ctx.arc(x, y, sz, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(124,92,252,${0.15 + Math.cos(t)*.1})`; ctx.fill();
+            ctx.fillStyle = `rgba(34, 211, 238,${0.15 + Math.cos(t)*.1})`; ctx.fill();
             ctx.beginPath(); ctx.arc(x2, y, sz, 0, Math.PI*2);
-            ctx.fillStyle = `rgba(252,92,160,${0.12 + Math.sin(t)*.08})`; ctx.fill();
+            ctx.fillStyle = `rgba(59, 130, 246,${0.12 + Math.sin(t)*.08})`; ctx.fill();
             if (i % 5 === 0) {
                 ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y);
                 ctx.strokeStyle = `rgba(92,244,252,0.08)`; ctx.lineWidth = 1; ctx.stroke();
             }
         }
-        requestAnimationFrame(draw);
+        lanjut(canvas, draw);
     };
     draw();
     window.addEventListener('resize', () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; });
@@ -328,8 +376,12 @@ const initProjectsCanvas = () => {
     const fs = 14;
     const cols = Math.floor(W / fs);
     const drops = Array(cols).fill(1);
+    let frameMatriks = 0;
     const chars = 'アイウエオカキクケコサシスセソ0123456789ABCDEF</>{}[]';
     const draw = () => {
+        // ±20 fps sudah cukup untuk hujan matriks; 60 fps pada kanvas setinggi
+        // section ini menghabiskan CPU dan membuat scroll patah-patah.
+        if ((frameMatriks = (frameMatriks + 1) % 3) !== 0) { lanjut(canvas, draw); return; }
         ctx.fillStyle = 'rgba(5,5,8,0.05)'; ctx.fillRect(0, 0, W, H);
         ctx.font = `${fs}px monospace`;
         drops.forEach((y, i) => {
@@ -340,7 +392,7 @@ const initProjectsCanvas = () => {
             if (y * fs > H && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         });
-        requestAnimationFrame(draw);
+        lanjut(canvas, draw);
     };
     draw();
     window.addEventListener('resize', () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; });
@@ -367,19 +419,19 @@ const initServicesCanvas = () => {
         ctx.clearRect(0, 0, W, H);
         edges.forEach(([a, b]) => {
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(124,92,252,${0.04 + Math.sin((a.pulse+b.pulse)/2)*.04})`;
+            ctx.strokeStyle = `rgba(34, 211, 238,${0.04 + Math.sin((a.pulse+b.pulse)/2)*.04})`;
             ctx.lineWidth = 1; ctx.stroke();
         });
         nodes.forEach(n => {
             n.pulse += 0.015;
             const r = 4 + Math.sin(n.pulse) * 3;
             const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r*3);
-            g.addColorStop(0, `rgba(124,92,252,${0.3+Math.sin(n.pulse)*.2})`);
+            g.addColorStop(0, `rgba(34, 211, 238,${0.3+Math.sin(n.pulse)*.2})`);
             g.addColorStop(1, 'transparent');
             ctx.beginPath(); ctx.arc(n.x, n.y, r*3, 0, Math.PI*2);
             ctx.fillStyle = g; ctx.fill();
         });
-        requestAnimationFrame(draw);
+        lanjut(canvas, draw);
     };
     draw();
     window.addEventListener('resize', () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; });
@@ -400,15 +452,15 @@ const initContactCanvas = () => {
         for (let i = 8; i > 0; i--) {
             const r = (i * 45) + Math.sin(tick * 0.02 + i) * 18;
             const g = ctx.createRadialGradient(W/2, H/2, r*.1, W/2, H/2, r);
-            g.addColorStop(0, `rgba(124,92,252,${0.06-i*0.005})`);
-            g.addColorStop(.5, `rgba(252,92,160,${0.03-i*0.002})`);
+            g.addColorStop(0, `rgba(34, 211, 238,${0.06-i*0.005})`);
+            g.addColorStop(.5, `rgba(59, 130, 246,${0.03-i*0.002})`);
             g.addColorStop(1, 'transparent');
             ctx.beginPath(); ctx.arc(W/2, H/2, r, 0, Math.PI*2);
-            ctx.strokeStyle = `rgba(124,92,252,${0.1-i*0.008})`;
+            ctx.strokeStyle = `rgba(34, 211, 238,${0.1-i*0.008})`;
             ctx.lineWidth = 1.5; ctx.stroke();
             ctx.fillStyle = g; ctx.fill();
         }
-        requestAnimationFrame(draw);
+        lanjut(canvas, draw);
     };
     draw();
     window.addEventListener('resize', () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; });
@@ -457,12 +509,9 @@ const initScrollAnimations = () => {
     // Topbar scroll opacity
     ScrollTrigger.create({
         start: 'top -60px',
-        onUpdate: (self) => {
-            const t = document.querySelector('.topbar');
-            if (!t) return;
-            t.style.background = self.progress > 0
-                ? 'rgba(5,5,8,0.95)'
-                : '';
+        // Hanya menulis gaya saat statusnya berubah, bukan di setiap frame scroll.
+        onToggle: (self) => {
+            document.querySelector('.topbar')?.classList.toggle('is-gulir', self.isActive);
         }
     });
 
@@ -473,19 +522,28 @@ const initScrollAnimations = () => {
    CURSOR GLOW
 ============================================ */
 const initCursorGlow = () => {
+    // Hanya untuk perangkat bertetikus; posisinya lewat transform (tanpa layout ulang)
+    // dan paling banyak sekali per frame.
+    if (!window.matchMedia('(pointer: fine)').matches) return;
     const glow = document.createElement('div');
     glow.style.cssText = `
-        position:fixed;width:350px;height:350px;border-radius:50%;
-        background:radial-gradient(circle,rgba(124,92,252,0.06),transparent 70%);
-        pointer-events:none;z-index:0;transform:translate(-50%,-50%);
+        position:fixed;left:0;top:0;width:350px;height:350px;border-radius:50%;
+        background:radial-gradient(circle,rgba(34, 211, 238,0.06),transparent 70%);
+        pointer-events:none;z-index:0;will-change:transform;
         transition:opacity .3s ease;opacity:0;
     `;
     document.body.appendChild(glow);
+    let x = 0, y = 0, antre = false;
     document.addEventListener('mousemove', e => {
-        glow.style.left = e.clientX + 'px';
-        glow.style.top  = e.clientY + 'px';
-        glow.style.opacity = '1';
-    });
+        x = e.clientX - 175; y = e.clientY - 175;
+        if (antre) return;
+        antre = true;
+        requestAnimationFrame(() => {
+            glow.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            glow.style.opacity = '1';
+            antre = false;
+        });
+    }, { passive: true });
     document.addEventListener('mouseleave', () => glow.style.opacity = '0');
 };
 

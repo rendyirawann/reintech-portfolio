@@ -27,6 +27,16 @@ class Project extends Model
         return $this->hasMany(ProjectImage::class)->orderBy('sort_order');
     }
 
+    public function files(): HasMany
+    {
+        return $this->hasMany(ProjectFile::class)->orderBy('sort_order');
+    }
+
+    public function links(): HasMany
+    {
+        return $this->hasMany(ProjectLink::class)->orderBy('sort_order');
+    }
+
     public function scopeVisible(Builder $query): Builder
     {
         return $query->where('is_visible', true);

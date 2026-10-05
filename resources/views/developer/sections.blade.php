@@ -3,7 +3,10 @@
 @section('title', 'Manage Sections')
 
 @section('content')
-<div style="display: grid; gap: 1.5rem;">
+@include('components.panduan', ['kunci' => 'sections'])
+
+<div class="pf-layout">
+<div style="display: grid; gap: 1.5rem; min-width: 0;">
     @foreach($sections as $section)
     <div class="dev-card">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; border-bottom: 1px solid var(--dev-border); padding-bottom: 1rem;">
@@ -11,7 +14,7 @@
                 <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Section: {{ strtoupper($section->section_key) }}</h3>
                 <p style="color: var(--dev-text-muted); font-size: 0.875rem;">Modify text content for this section</p>
             </div>
-            <form action="{{ route('developer.sections.toggle', $section->id) }}" method="POST">
+            <form action="{{ route('admin.sections.toggle', $section->id) }}" method="POST">
                 @csrf
                 <button type="submit" class="dev-btn" style="background-color: {{ $section->is_visible ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)' }}; color: {{ $section->is_visible ? '#10b981' : '#64748b' }}; border: 1px solid currentColor;">
                     {{ $section->is_visible ? '👁️ Visible' : '🙈 Hidden' }}
@@ -19,7 +22,7 @@
             </form>
         </div>
 
-        <form action="{{ route('developer.sections.update', $section->id) }}" method="POST">
+        <form action="{{ route('admin.sections.update', $section->id) }}" method="POST" data-preview-prefix="sections.{{ $section->section_key }}.">
             @csrf @method('PUT')
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
@@ -42,7 +45,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
                 <div class="form-group">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--dev-accent);">Contact Email (Value)</label>
-                    <input type="email" name="contact_email" class="dev-input" value="{{ $identity->contact_email }}" placeholder="hello@reintech.dev">
+                    <input type="email" name="contact_email" data-preview-key="identity.contact_email" class="dev-input" value="{{ $identity->contact_email }}" placeholder="hello@reintech.dev">
                 </div>
                 <div class="form-group">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--dev-accent);">WhatsApp Number</label>
@@ -64,7 +67,7 @@
             {{-- Existing Stats --}}
             @foreach($heroStats as $stat)
             <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: end;">
-                <form action="{{ route('developer.sections.hero-stats.update', $stat->id) }}" method="POST" style="display: grid; grid-template-columns: 100px 80px 1fr 80px auto; gap: 0.75rem; align-items: end; flex: 1;">
+                <form action="{{ route('admin.sections.hero-stats.update', $stat->id) }}" method="POST" data-preview-prefix="hero_stats.{{ $stat->id }}." style="display: grid; grid-template-columns: 100px 80px 1fr 170px 70px auto; gap: 0.75rem; align-items: end; flex: 1;">
                     @csrf @method('PUT')
                     <div>
                         <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Value</label>
@@ -79,12 +82,21 @@
                         <input type="text" name="label" class="dev-input" value="{{ $stat->label }}" style="padding: 0.4rem;">
                     </div>
                     <div>
+                        <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Otomatis</label>
+                        <select name="auto_key" class="dev-input" style="padding: 0.4rem;" title="Angka dihitung sendiri. Untuk tahun pengalaman, isi Value dengan tahun mulai (mis. 2021).">
+                            <option value="">Manual</option>
+                            @foreach (\App\Models\HeroStat::OTOMATIS as $k => $l)
+                                <option value="{{ $k }}" @selected($stat->auto_key === $k)>{{ $l }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
                         <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Order</label>
                         <input type="number" name="sort_order" class="dev-input" value="{{ $stat->sort_order }}" style="padding: 0.4rem;">
                     </div>
                     <button type="submit" class="dev-btn" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">Save</button>
                 </form>
-                <form action="{{ route('developer.sections.hero-stats.destroy', $stat->id) }}" method="POST" onsubmit="return confirm('Delete this stat?');">
+                <form action="{{ route('admin.sections.hero-stats.destroy', $stat->id) }}" method="POST" onsubmit="return confirm('Delete this stat?');">
                     @csrf @method('DELETE')
                     <button type="submit" class="dev-btn dev-btn-danger" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">×</button>
                 </form>
@@ -92,7 +104,7 @@
             @endforeach
 
             {{-- Add New Stat --}}
-            <form action="{{ route('developer.sections.hero-stats.store') }}" method="POST" style="display: grid; grid-template-columns: 100px 80px 1fr 80px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
+            <form action="{{ route('admin.sections.hero-stats.store') }}" method="POST" style="display: grid; grid-template-columns: 100px 80px 1fr 170px 70px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
                 @csrf
                 <div>
                     <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Value</label>
@@ -105,6 +117,15 @@
                 <div>
                     <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Label</label>
                     <input type="text" name="label" class="dev-input" placeholder="e.g. Clients" style="padding: 0.4rem;" required>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Otomatis</label>
+                    <select name="auto_key" class="dev-input" style="padding: 0.4rem;" title="Angka dihitung sendiri. Untuk tahun pengalaman, isi Value dengan tahun mulai (mis. 2021).">
+                        <option value="">Manual</option>
+                        @foreach (\App\Models\HeroStat::OTOMATIS as $k => $l)
+                            <option value="{{ $k }}" @selected(null === $k)>{{ $l }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Order</label>
@@ -124,7 +145,7 @@
 
             @foreach($aboutCards as $card)
             <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: end;">
-                <form action="{{ route('developer.sections.about-cards.update', $card->id) }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 80px auto; gap: 0.75rem; align-items: end; flex: 1;">
+                <form action="{{ route('admin.sections.about-cards.update', $card->id) }}" method="POST" data-preview-prefix="about_cards.{{ $card->id }}." style="display: grid; grid-template-columns: 80px 1fr 2fr 80px auto; gap: 0.75rem; align-items: end; flex: 1;">
                     @csrf @method('PUT')
                     <div>
                         <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Icon</label>
@@ -144,7 +165,7 @@
                     </div>
                     <button type="submit" class="dev-btn" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">Save</button>
                 </form>
-                <form action="{{ route('developer.sections.about-cards.destroy', $card->id) }}" method="POST" onsubmit="return confirm('Delete this card?');">
+                <form action="{{ route('admin.sections.about-cards.destroy', $card->id) }}" method="POST" onsubmit="return confirm('Delete this card?');">
                     @csrf @method('DELETE')
                     <button type="submit" class="dev-btn dev-btn-danger" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">×</button>
                 </form>
@@ -152,7 +173,7 @@
             @endforeach
 
             {{-- Add New Card --}}
-            <form action="{{ route('developer.sections.about-cards.store') }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 80px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
+            <form action="{{ route('admin.sections.about-cards.store') }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 80px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
                 @csrf
                 <div>
                     <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Icon</label>
@@ -184,7 +205,7 @@
 
             @foreach($serviceItems as $item)
             <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: end;">
-                <form action="{{ route('developer.sections.service-items.update', $item->id) }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 120px 80px auto; gap: 0.75rem; align-items: end; flex: 1;">
+                <form action="{{ route('admin.sections.service-items.update', $item->id) }}" method="POST" data-preview-prefix="service_items.{{ $item->id }}." style="display: grid; grid-template-columns: 80px 1fr 2fr 120px 80px auto; gap: 0.75rem; align-items: end; flex: 1;">
                     @csrf @method('PUT')
                     <div>
                         <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Icon</label>
@@ -208,7 +229,7 @@
                     </div>
                     <button type="submit" class="dev-btn" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">Save</button>
                 </form>
-                <form action="{{ route('developer.sections.service-items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this service?');">
+                <form action="{{ route('admin.sections.service-items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this service?');">
                     @csrf @method('DELETE')
                     <button type="submit" class="dev-btn dev-btn-danger" style="padding: 0.4rem 0.75rem; font-size: 0.75rem;">×</button>
                 </form>
@@ -216,7 +237,7 @@
             @endforeach
 
             {{-- Add New Service --}}
-            <form action="{{ route('developer.sections.service-items.store') }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 120px 80px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
+            <form action="{{ route('admin.sections.service-items.store') }}" method="POST" style="display: grid; grid-template-columns: 80px 1fr 2fr 120px 80px auto; gap: 0.75rem; align-items: end; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--dev-border);">
                 @csrf
                 <div>
                     <label style="display: block; font-size: 0.7rem; color: var(--dev-text-muted); margin-bottom: 0.25rem;">Icon</label>
@@ -245,5 +266,11 @@
 
     </div>
     @endforeach
+</div>
+
+{{-- Pratinjau langsung: setiap formulir di kiri menyatakan awalan kuncinya
+     lewat data-preview-prefix, jadi ketikan di formulir mana pun tampil di
+     bagian yang sesuai pada halaman depan. --}}
+@include('components.preview', ['target' => '#hero'])
 </div>
 @endsection

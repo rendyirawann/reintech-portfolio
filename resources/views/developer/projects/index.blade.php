@@ -3,10 +3,13 @@
 @section('title', 'Manage Projects')
 
 @section('content')
-<div class="dev-card">
+@include('components.panduan', ['kunci' => 'projects'])
+
+<div class="pf-layout">
+<div class="dev-card" style="min-width: 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h3 style="margin: 0;">Portfolio Projects</h3>
-        <a href="{{ route('developer.projects.create') }}" class="dev-btn" style="text-decoration: none;">+ Add New Project</a>
+        <a href="{{ route('admin.projects.create') }}" class="dev-btn" style="text-decoration: none;">+ Add New Project</a>
     </div>
 
     <div style="overflow-x: auto;">
@@ -37,7 +40,7 @@
                     <td style="color: var(--dev-text-muted);">{{ $project->year ?? '-' }}</td>
                     <td>{{ $project->sort_order }}</td>
                     <td>
-                        <form action="{{ route('developer.projects.toggle', $project->id) }}" method="POST">
+                        <form action="{{ route('admin.projects.toggle', $project->id) }}" method="POST">
                             @csrf
                             <button type="submit" style="background: none; border: none; cursor: pointer; color: {{ $project->is_visible ? '#10b981' : '#64748b' }};">
                                 {{ $project->is_visible ? 'Visible' : 'Hidden' }}
@@ -45,8 +48,8 @@
                         </form>
                     </td>
                     <td style="text-align: right;">
-                        <a href="{{ route('developer.projects.edit', $project->id) }}" class="dev-btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; text-decoration: none; margin-right: 0.5rem; display: inline-block;">Edit</a>
-                        <form action="{{ route('developer.projects.destroy', $project->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Delete this project and all its gallery images?');">
+                        <a href="{{ route('admin.projects.edit', $project->id) }}" class="dev-btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; text-decoration: none; margin-right: 0.5rem; display: inline-block;">Edit</a>
+                        <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Delete this project and all its gallery images?');">
                             @csrf @method('DELETE')
                             <button type="submit" class="dev-btn dev-btn-danger" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Delete</button>
                         </form>
@@ -60,5 +63,9 @@
             </tbody>
         </table>
     </div>
+</div>
+
+{{-- Hanya proyek yang tampil (Visible) muncul di sini. --}}
+@include('components.preview', ['target' => '#projects'])
 </div>
 @endsection

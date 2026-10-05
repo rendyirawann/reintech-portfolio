@@ -1,31 +1,121 @@
 @import "tailwindcss";
+/* Urutan sama dengan app.css: tailwind dulu, lalu font. */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Oswald:wght@600;700&family=Chakra+Petch:wght@500;600&family=Playfair+Display:wght@600&display=swap');
+
+/*
+ * Panel admin REINTECH.
+ *
+ * Seluruh halaman admin memakai token di bawah (--dev-*). Karena itu mengubah
+ * warna di sini ikut mengubah setiap kartu, input, dan tombol di semua
+ * halaman sekaligus — termasuk halaman lama yang masih bergaya inline, sebab
+ * gaya inline itu pun merujuk ke variabel yang sama.
+ *
+ * PALET
+ *
+ * Sengaja tanpa ungu. Warna utama biru -> cyan, diambil dari
+ * --color-accent-cta situs depan (#3B82F6) supaya panel terasa satu keluarga
+ * dengan portofolionya. Empat warna aksen (cyan, hijau, kuning, merah muda)
+ * hanya dipakai untuk membedakan kartu statistik — bukan sebagai dekorasi
+ * acak, sehingga setiap warna tetap berarti sesuatu.
+ */
 
 :root {
-    --dev-bg: #f8fafc;
+    --dev-font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --dev-display: 'Oswald', 'Arial Narrow', sans-serif;
+    --dev-mono: 'Chakra Petch', ui-monospace, monospace;
+    --dev-serif: 'Playfair Display', Georgia, serif;
+
+    /* terang */
+    --dev-bg: #f3f6fb;
+    --dev-bg-soft: #e9eef7;
     --dev-surface: #ffffff;
-    --dev-text: #0f172a;
-    --dev-text-muted: #64748b;
+    --dev-surface-2: #f6f8fc;
+    --dev-text: #0e1726;
+    --dev-text-muted: #5b6b82;
+    --dev-border: #dde4ef;
+    --dev-shadow: 0 1px 2px rgba(15, 23, 42, .05), 0 12px 32px -16px rgba(15, 23, 42, .22);
+
     --dev-accent: #2563eb;
     --dev-accent-hover: #1d4ed8;
-    --dev-border: #e2e8f0;
+    --dev-accent-2: #0891b2;
+    --dev-grad: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+
+    --dev-blue: #2563eb;
+    --dev-cyan: #0891b2;
+    --dev-green: #059669;
+    --dev-amber: #d97706;
+    --dev-rose: #e11d48;
+
+    --dev-radius: 16px;
+    --dev-radius-sm: 10px;
 }
 
 :root[data-dev-theme="dark"] {
-    --dev-bg: #0f172a;
-    --dev-surface: #1e293b;
-    --dev-text: #f8fafc;
-    --dev-text-muted: #94a3b8;
+    /* Latar sama dengan halaman login (#05070d), supaya perpindahan dari
+       login ke dashboard terbaca sebagai satu ruang yang sama. */
+    --dev-bg: #05070d;
+    --dev-bg-soft: #0a0f1b;
+    --dev-surface: rgba(12, 16, 28, .88);
+    --dev-surface-2: #10172a;
+    --dev-text: #f1f5fb;
+    --dev-text-muted: #8a9bb8;
+    --dev-border: #16203a;
+    --dev-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 18px 40px -20px rgba(0, 0, 0, .8);
+
     --dev-accent: #3b82f6;
     --dev-accent-hover: #60a5fa;
-    --dev-border: #334155;
+    --dev-accent-2: #22d3ee;
+    --dev-grad: linear-gradient(100deg, #22d3ee 0%, #3b82f6 55%, #1d4ed8 100%);
+
+    --dev-blue: #60a5fa;
+    --dev-cyan: #22d3ee;
+    --dev-green: #34d399;
+    --dev-amber: #fbbf24;
+    --dev-rose: #fb7185;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
 }
 
 body {
-    background-color: var(--dev-bg);
+    background: var(--dev-bg);
     color: var(--dev-text);
-    font-family: 'Inter', system-ui, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: var(--dev-font);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 250ms ease, color 250ms ease;
 }
+
+/* Cahaya latar lembut. Dipasang sebagai pseudo-elemen tetap, bukan gambar,
+   supaya tidak menambah satu permintaan jaringan pun. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(40rem 28rem at 8% -10%, color-mix(in srgb, var(--dev-blue) 16%, transparent), transparent 70%),
+        radial-gradient(34rem 26rem at 100% 0%, color-mix(in srgb, var(--dev-cyan) 13%, transparent), transparent 70%),
+        radial-gradient(30rem 24rem at 60% 110%, color-mix(in srgb, var(--dev-green) 9%, transparent), transparent 70%);
+}
+
+a {
+    color: var(--dev-accent);
+}
+
+h1, h2, h3, h4 {
+    letter-spacing: -.015em;
+}
+
+/* ─────────────────────────── komponen dasar ─────────────────────────── */
 
 .dev-container {
     max-width: 1200px;
@@ -34,63 +124,1131 @@ body {
 }
 
 .dev-card {
-    background-color: var(--dev-surface);
+    background: var(--dev-surface);
     border: 1px solid var(--dev-border);
-    border-radius: 0.5rem;
+    border-radius: var(--dev-radius);
     padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--dev-shadow);
 }
 
 .dev-input {
-    background-color: var(--dev-bg);
+    width: 100%;
+    background: var(--dev-surface-2);
     color: var(--dev-text);
     border: 1px solid var(--dev-border);
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    width: 100%;
+    border-radius: var(--dev-radius-sm);
+    padding: .65rem .9rem;
+    font: inherit;
+    font-size: .92rem;
+    transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.dev-input::placeholder {
+    color: color-mix(in srgb, var(--dev-text-muted) 75%, transparent);
 }
 
 .dev-input:focus {
     outline: none;
     border-color: var(--dev-accent);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    background: var(--dev-surface);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--dev-accent) 18%, transparent);
 }
 
 .dev-btn {
-    background-color: var(--dev-accent);
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    background: var(--dev-grad);
+    color: #fff;
+    border: 0;
+    border-radius: var(--dev-radius-sm);
+    padding: .62rem 1.05rem;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    border: none;
+    box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--dev-accent) 70%, transparent);
+    transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
 }
 
 .dev-btn:hover {
-    background-color: var(--dev-accent-hover);
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+    box-shadow: 0 12px 26px -12px color-mix(in srgb, var(--dev-accent) 80%, transparent);
+}
+
+.dev-btn:active {
+    transform: translateY(0);
+}
+
+/* SVG sebaris tanpa atribut width/height mengembang memenuhi wadahnya —
+   itulah yang membuat ikon tombol membengkak. Ukurannya dikunci di sini. */
+.dev-btn svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+}
+
+.dev-btn {
+    white-space: nowrap;
+}
+
+.dev-btn:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--dev-accent) 45%, transparent);
+    outline-offset: 2px;
+}
+
+.dev-btn-ghost {
+    background: transparent;
+    color: var(--dev-text);
+    border: 1px solid var(--dev-border);
+    box-shadow: none;
+}
+
+.dev-btn-ghost:hover {
+    background: var(--dev-surface-2);
+    filter: none;
+    box-shadow: none;
 }
 
 .dev-btn-danger {
-    background-color: #ef4444;
-}
-
-.dev-btn-danger:hover {
-    background-color: #dc2626;
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+    box-shadow: 0 8px 20px -10px rgba(225, 29, 72, .6);
 }
 
 .dev-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: .9rem;
 }
 
-.dev-table th, .dev-table td {
-    padding: 0.75rem 1rem;
+.dev-table th,
+.dev-table td {
+    padding: .8rem 1rem;
     border-bottom: 1px solid var(--dev-border);
     text-align: left;
 }
 
 .dev-table th {
-    font-weight: 600;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     color: var(--dev-text-muted);
 }
+
+.dev-table tbody tr {
+    transition: background-color 150ms ease;
+}
+
+.dev-table tbody tr:hover {
+    background: var(--dev-surface-2);
+}
+
+.alert {
+    display: flex;
+    gap: .6rem;
+    align-items: flex-start;
+    padding: .9rem 1rem;
+    border-radius: var(--dev-radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: .9rem;
+}
+
+.alert-success {
+    background: color-mix(in srgb, var(--dev-green) 12%, transparent);
+    color: var(--dev-green);
+    border: 1px solid color-mix(in srgb, var(--dev-green) 30%, transparent);
+}
+
+.alert-danger {
+    background: color-mix(in srgb, var(--dev-rose) 12%, transparent);
+    color: var(--dev-rose);
+    border: 1px solid color-mix(in srgb, var(--dev-rose) 30%, transparent);
+}
+
+/* ─────────────────────────────── tata letak ─────────────────────────────── */
+
+.dev-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.dev-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 264px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem .9rem;
+    background: color-mix(in srgb, var(--dev-surface) 82%, transparent);
+    backdrop-filter: blur(14px);
+    border-right: 1px solid var(--dev-border);
+}
+
+.dev-brand {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .35rem .6rem 1.35rem;
+    text-decoration: none;
+    color: var(--dev-text);
+}
+
+.dev-brand img {
+    width: 38px;
+    height: 38px;
+}
+
+.dev-brand strong {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+
+.dev-brand span {
+    display: block;
+    font-size: .72rem;
+    color: var(--dev-text-muted);
+}
+
+.dev-nav {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.dev-nav-label {
+    padding: .9rem .75rem .35rem;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dev-text-muted);
+}
+
+.dev-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .62rem .75rem;
+    border-radius: var(--dev-radius-sm);
+    color: var(--dev-text-muted);
+    text-decoration: none;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.dev-nav-link svg {
+    width: 19px;
+    height: 19px;
+    flex: none;
+}
+
+.dev-nav-link:hover {
+    color: var(--dev-text);
+    background: var(--dev-surface-2);
+}
+
+.dev-nav-link.active {
+    color: #fff;
+    background: var(--dev-grad);
+    box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--dev-accent) 90%, transparent);
+}
+
+.dev-sidebar-foot {
+    padding-top: .9rem;
+    border-top: 1px solid var(--dev-border);
+}
+
+.dev-logout {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    color: var(--dev-rose);
+}
+
+.dev-logout:hover {
+    color: var(--dev-rose);
+    background: color-mix(in srgb, var(--dev-rose) 10%, transparent);
+}
+
+.dev-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.dev-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .95rem 2rem;
+    background: color-mix(in srgb, var(--dev-bg) 78%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--dev-border);
+}
+
+.dev-topbar h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.dev-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.dev-user {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-size: .86rem;
+    color: var(--dev-text-muted);
+}
+
+.dev-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--dev-grad);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.dev-icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--dev-radius-sm);
+    border: 1px solid var(--dev-border);
+    background: var(--dev-surface);
+    color: var(--dev-text);
+    cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.dev-icon-btn:hover {
+    border-color: var(--dev-accent);
+}
+
+.dev-icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.dev-menu-toggle {
+    display: none;
+}
+
+.dev-main {
+    flex: 1;
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+/* ─────────────────────────────── dasbor ─────────────────────────────── */
+
+.dash-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.75rem 1.9rem;
+    border-radius: calc(var(--dev-radius) + 4px);
+    color: #fff;
+    background: var(--dev-grad);
+    box-shadow: 0 24px 50px -28px color-mix(in srgb, var(--dev-accent) 90%, transparent);
+    margin-bottom: 1.75rem;
+}
+
+/* Pola garis sirkuit halus — mengulang motif lambang tanpa gambar tambahan. */
+.dash-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 88% 20%, rgba(255, 255, 255, .22), transparent 38%),
+        repeating-linear-gradient(115deg, rgba(255, 255, 255, .06) 0 1px, transparent 1px 22px);
+}
+
+.dash-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.dash-hero h2 {
+    margin: 0 0 .35rem;
+    font-size: 1.55rem;
+    font-weight: 800;
+}
+
+.dash-hero p {
+    margin: 0;
+    opacity: .9;
+    max-width: 52ch;
+}
+
+.dash-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+.dash-hero .dev-btn {
+    background: #fff;
+    color: #0e1726;
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .55);
+}
+
+.dash-hero .dev-btn-ghost {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+    border-color: rgba(255, 255, 255, .35);
+}
+
+.dash-stats {
+    display: grid;
+    /* 170px: cukup kecil agar kelima kartu muat sebaris di desktop, cukup
+       besar agar angka dan labelnya tidak berdesakan. Di bawah itu grid
+       turun sendiri menjadi 3, 2, lalu 1 kolom. */
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.dash-stat {
+    --warna: var(--dev-blue);
+    position: relative;
+    overflow: hidden;
+    padding: 1.25rem 1.3rem;
+    border-radius: var(--dev-radius);
+    background: var(--dev-surface);
+    border: 1px solid var(--dev-border);
+    box-shadow: var(--dev-shadow);
+    text-decoration: none;
+    color: var(--dev-text);
+    transition: transform 200ms ease, border-color 200ms ease;
+}
+
+.dash-stat:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--warna) 45%, transparent);
+}
+
+.dash-stat::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: var(--warna);
+}
+
+.dash-stat-ikon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    color: var(--warna);
+    background: color-mix(in srgb, var(--warna) 14%, transparent);
+    margin-bottom: .9rem;
+}
+
+.dash-stat-ikon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.dash-stat-angka {
+    font-size: 1.95rem;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.dash-stat-label {
+    font-size: .84rem;
+    color: var(--dev-text-muted);
+    font-weight: 500;
+}
+
+.dash-stat-kaki {
+    margin-top: .7rem;
+    font-size: .78rem;
+    color: var(--warna);
+    font-weight: 600;
+}
+
+.warna-biru { --warna: var(--dev-blue); }
+.warna-cyan { --warna: var(--dev-cyan); }
+.warna-hijau { --warna: var(--dev-green); }
+.warna-kuning { --warna: var(--dev-amber); }
+.warna-merah { --warna: var(--dev-rose); }
+
+.dash-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 1.25rem;
+}
+
+.dash-panel-kepala {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.dash-panel-kepala h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.dash-panel-kepala a {
+    font-size: .82rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.dash-item {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .7rem 0;
+    border-bottom: 1px solid var(--dev-border);
+}
+
+.dash-item:last-child {
+    border-bottom: 0;
+}
+
+.dash-item-gambar {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 11px;
+    object-fit: cover;
+    background: var(--dev-surface-2);
+    display: grid;
+    place-items: center;
+    color: var(--dev-text-muted);
+    font-weight: 700;
+    font-size: .8rem;
+}
+
+.dash-item-teks {
+    flex: 1;
+    min-width: 0;
+}
+
+.dash-item-teks strong {
+    display: block;
+    font-size: .9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dash-item-teks span {
+    font-size: .78rem;
+    color: var(--dev-text-muted);
+}
+
+.dev-pil {
+    flex: none;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .2rem .55rem;
+    border-radius: 99px;
+}
+
+.dev-pil-hijau {
+    color: var(--dev-green);
+    background: color-mix(in srgb, var(--dev-green) 14%, transparent);
+}
+
+.dev-pil-abu {
+    color: var(--dev-text-muted);
+    background: var(--dev-surface-2);
+}
+
+.dash-aksi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .7rem;
+}
+
+.dash-aksi a {
+    --warna: var(--dev-blue);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: .95rem;
+    border-radius: 13px;
+    border: 1px solid var(--dev-border);
+    background: var(--dev-surface-2);
+    text-decoration: none;
+    color: var(--dev-text);
+    font-size: .84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.dash-aksi a:hover {
+    border-color: var(--warna);
+    transform: translateY(-1px);
+}
+
+.dash-aksi svg {
+    width: 20px;
+    height: 20px;
+    color: var(--warna);
+}
+
+.dash-kosong {
+    padding: 1.5rem 0;
+    text-align: center;
+    color: var(--dev-text-muted);
+    font-size: .88rem;
+}
+
+/* ─────────────────────────────── login ─────────────────────────────── */
+
+.login-wrap {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+}
+
+.login-brand {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    color: #fff;
+    background: linear-gradient(150deg, #0b1d44 0%, #1d4ed8 55%, #0891b2 100%);
+}
+
+/* Cincin orbit — mengulang lambang REINTECH sebagai ornamen besar. */
+.login-brand::before,
+.login-brand::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .16);
+    pointer-events: none;
+}
+
+.login-brand::before {
+    width: 560px;
+    height: 560px;
+    right: -210px;
+    bottom: -210px;
+}
+
+.login-brand::after {
+    width: 360px;
+    height: 360px;
+    right: -110px;
+    bottom: -110px;
+    border-color: rgba(255, 255, 255, .24);
+}
+
+.login-brand > * {
+    position: relative;
+    z-index: 1;
+}
+
+.login-logo {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: .03em;
+}
+
+.login-logo img {
+    width: 44px;
+    height: 44px;
+}
+
+.login-brand h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+    font-weight: 800;
+    line-height: 1.12;
+    max-width: 16ch;
+}
+
+.login-brand p {
+    margin: 0;
+    max-width: 44ch;
+    opacity: .85;
+}
+
+.login-fitur {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: 1.75rem;
+}
+
+.login-fitur span {
+    padding: .35rem .8rem;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .2);
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.login-kaki {
+    font-size: .8rem;
+    opacity: .7;
+}
+
+.login-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+}
+
+.login-kartu {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-kartu h1 {
+    margin: 0 0 .35rem;
+    font-size: 1.75rem;
+    font-weight: 800;
+}
+
+.login-kartu > p {
+    margin: 0 0 2rem;
+    color: var(--dev-text-muted);
+}
+
+.login-field {
+    margin-bottom: 1.1rem;
+}
+
+.login-field label {
+    display: block;
+    margin-bottom: .45rem;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--dev-text);
+}
+
+.login-input {
+    position: relative;
+}
+
+.login-input svg {
+    position: absolute;
+    left: .85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--dev-text-muted);
+    pointer-events: none;
+}
+
+.login-input .dev-input {
+    padding-left: 2.6rem;
+    height: 48px;
+}
+
+.login-intip {
+    position: absolute;
+    right: .45rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--dev-text-muted);
+    cursor: pointer;
+}
+
+.login-intip:hover {
+    color: var(--dev-text);
+    background: var(--dev-surface-2);
+}
+
+.login-intip svg {
+    position: static;
+    transform: none;
+}
+
+.login-kirim {
+    width: 100%;
+    height: 48px;
+    margin-top: .5rem;
+    font-size: .95rem;
+}
+
+.login-tema {
+    position: fixed;
+    top: 1.1rem;
+    right: 1.1rem;
+    z-index: 5;
+}
+
+/* ─────────────────────────────── responsif ─────────────────────────────── */
+
+@media (max-width: 1080px) {
+    .dash-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .login-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .login-brand {
+        padding: 2rem 1.5rem;
+        min-height: auto;
+    }
+
+    .login-brand h2 {
+        font-size: 1.7rem;
+    }
+
+    .login-brand .login-kaki {
+        display: none;
+    }
+}
+
+@media (max-width: 860px) {
+    .dev-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 250ms ease;
+        box-shadow: 20px 0 50px -20px rgba(0, 0, 0, .5);
+    }
+
+    .dev-layout.menu-buka .dev-sidebar {
+        transform: translateX(0);
+    }
+
+    .dev-layout.menu-buka::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        background: rgba(2, 6, 17, .5);
+    }
+
+    .dev-menu-toggle {
+        display: grid;
+    }
+
+    .dev-topbar {
+        padding: .8rem 1rem;
+    }
+
+    .dev-main {
+        padding: 1.1rem;
+    }
+
+    .dev-user span {
+        display: none;
+    }
+
+    .dash-hero {
+        padding: 1.4rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .dash-aksi {
+        grid-template-columns: 1fr;
+    }
+
+    /* Dua kolom di ponsel: satu kartu per baris membuat lima statistik
+       memakan hampir tiga layar gulir. */
+    .dash-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+    }
+
+    .dash-stat {
+        padding: 1rem;
+    }
+
+    .dash-stat-angka {
+        font-size: 1.6rem;
+    }
+
+    .dash-stat-kaki {
+        display: none;
+    }
+
+    .dev-card {
+        padding: 1.1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition-duration: 0ms !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TEMA PORTFOLIO — mengikuti panel admin portfolio-pm: latar hampir hitam
+   dengan cahaya dua warna, judul Oswald kapital, label monospace, nama
+   merek serif, dan garis gradasi pada menu aktif. Warnanya cyan x biru
+   REINTECH, bukan merah x biru portfolio-pm, dan tanpa ungu.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root[data-dev-theme="dark"] body {
+    background:
+        radial-gradient(50% 40% at 0% 100%, rgba(34, 211, 238, .1), transparent 70%),
+        radial-gradient(50% 40% at 100% 0%, rgba(29, 78, 216, .16), transparent 70%),
+        #05070d;
+    background-attachment: fixed;
+}
+
+:root[data-dev-theme="dark"] body::before {
+    /* Garis tipis seperti halaman login, memudar dari sudut kiri atas. */
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .018) 0 1px, transparent 1px 22px);
+    mask-image: radial-gradient(ellipse at 20% 10%, #000 10%, transparent 65%);
+}
+
+:root[data-dev-theme="dark"] .dev-sidebar {
+    background: rgba(7, 10, 18, .92);
+}
+
+:root[data-dev-theme="dark"] .dev-topbar {
+    background: rgba(5, 7, 13, .82);
+}
+
+.dev-brand strong {
+    font-family: var(--dev-serif);
+    font-weight: 600;
+    letter-spacing: .05em;
+}
+
+.dev-brand span,
+.dev-nav-label {
+    font-family: var(--dev-mono);
+    letter-spacing: .16em;
+}
+
+.dev-topbar h1 {
+    font-family: var(--dev-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+/* Menu aktif: bukan blok warna penuh, melainkan latar lembut + garis
+   gradasi di tepi kiri — lebih tenang, dan tetap jelas terbaca. */
+.dev-nav-link.active {
+    position: relative;
+    color: var(--dev-text);
+    background: color-mix(in srgb, var(--dev-accent) 12%, transparent);
+    box-shadow: none;
+}
+
+.dev-nav-link.active::before {
+    content: '';
+    position: absolute;
+    /* Di dalam tautan, bukan di luarnya: wadah menu memakai overflow-y:auto
+       yang memotong apa pun yang menjorok keluar. */
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--dev-grad);
+}
+
+.dev-nav-link.active svg {
+    color: var(--dev-accent-2);
+}
+
+/* Kartu dengan siku HUD tipis di kiri atas, seperti kartu login. */
+.dev-card,
+.dash-stat {
+    position: relative;
+}
+
+:root[data-dev-theme="dark"] .dev-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 16px;
+    height: 16px;
+    border-top: 2px solid color-mix(in srgb, var(--dev-accent-2) 70%, transparent);
+    border-left: 2px solid color-mix(in srgb, var(--dev-accent-2) 70%, transparent);
+    border-top-left-radius: 8px;
+    pointer-events: none;
+}
+
+.dash-panel-kepala h3 {
+    font-family: var(--dev-mono);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--dev-text-muted);
+}
+
+.dash-hero h2 {
+    font-family: var(--dev-display);
+    font-size: 1.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+}
+
+.dash-stat-label {
+    font-family: var(--dev-mono);
+    font-size: .74rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+/* Tombol utama: pil gelap berbingkai gradasi, sama seperti tombol Masuk. */
+:root[data-dev-theme="dark"] .dev-btn:not(.dev-btn-ghost):not(.dev-btn-danger) {
+    border: 1.5px solid transparent;
+    background: linear-gradient(#0a0e18, #0a0e18) padding-box, var(--dev-grad) border-box;
+    box-shadow:
+        0 10px 30px -14px rgba(34, 211, 238, .55),
+        0 10px 30px -14px rgba(29, 78, 216, .7);
+}
+
+:root[data-dev-theme="dark"] .dash-hero .dev-btn:not(.dev-btn-ghost) {
+    background: #fff;
+    border-color: transparent;
+    color: #05070d;
+}
+
+/* Sapaan dashboard di tema gelap: bukan blok gradasi pekat, melainkan kartu
+   gelap bercahaya dua warna — sejalan dengan kartu-kartu lain di halaman. */
+:root[data-dev-theme="dark"] .dash-hero {
+    background:
+        radial-gradient(70% 140% at 0% 100%, rgba(34, 211, 238, .16), transparent 60%),
+        radial-gradient(60% 140% at 100% 0%, rgba(29, 78, 216, .32), transparent 60%),
+        #0a0f1b;
+    border: 1px solid var(--dev-border);
+    box-shadow: 0 30px 60px -40px rgba(29, 78, 216, .7);
+}
+
+:root[data-dev-theme="dark"] .dash-hero::after {
+    background: repeating-linear-gradient(115deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 22px);
+}
+
+:root[data-dev-theme="dark"] .dash-hero p {
+    color: var(--dev-text-muted);
+    opacity: 1;
+}
+
+
+/* ─── Kotak "Panduan" & petunjuk isian (dari portfolio-pm, warna REINTECH) ─── */
+.pf-guide {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: linear-gradient(100deg, color-mix(in srgb, var(--dev-accent-2) 9%, transparent), color-mix(in srgb, var(--dev-accent) 9%, transparent));
+    border: 1px solid color-mix(in srgb, var(--dev-accent-2) 24%, transparent);
+}
+.pf-guide__icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--dev-accent-2) 15%, transparent);
+    color: var(--dev-accent-2);
+}
+.pf-guide__icon svg { width: 20px; height: 20px; }
+.pf-guide__title {
+    margin-bottom: 2px;
+    font-family: var(--dev-mono, ui-monospace, monospace);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--dev-accent-2);
+}
+.pf-guide__text { margin: 0; font-size: .88rem; line-height: 1.55; color: var(--dev-text); }
+.pf-guide__steps { margin: 8px 0 0; padding-left: 18px; font-size: .85rem; color: var(--dev-text-muted); }
+.pf-guide__steps li + li { margin-top: 3px; }
+.pf-hint { display: block; margin-top: .35rem; font-size: .76rem; color: var(--dev-text-muted); }
+
+
+/* ─── footer panel ─── */
+.dev-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 1rem 2rem 1.4rem;
+    border-top: 1px solid var(--dev-border);
+    font-size: .8rem;
+    color: var(--dev-text-muted);
+}
+.dev-footer a { color: inherit; text-decoration: none; cursor: pointer; transition: color 180ms ease; }
+.dev-footer a:hover { color: var(--dev-text); }
+.dev-footer-social { display: flex; gap: .5rem; }
+.dev-footer-social a {
+    width: 32px; height: 32px; display: grid; place-items: center;
+    border: 1px solid var(--dev-border); border-radius: 50%;
+}
+.dev-footer-social a:hover { border-color: var(--dev-accent-2); }
+.dev-footer-social svg { width: 15px; height: 15px; }
+@media (max-width: 767.98px) { .dev-footer { padding: 1rem 1rem 1.2rem; justify-content: center; } }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Lambang REINTECH: huruf R tebal di atas petak persegi membulat.
+
+    Versi sebelumnya memakai dua busur orbit melingkari huruf, dan dari jauh
+    atau pada ukuran favicon keduanya menyatu menjadi cincin sehingga
+    lambangnya terbaca sebagai angka nol. Karena itu bentuk pembungkusnya
+    kini persegi membulat, bukan lingkaran, dan hurufnya dibuat tebal agar
+    tetap terbaca R bahkan pada 16 piksel.
+
+    Warna: gradasi cyan (#22d3ee) ke biru (#3B82F6) ke biru tua (#1D4ED8),
+    di atas petak gelap. Tanpa ungu.
+
+    CATATAN: jangan menulis dua tanda hubung berturut-turut di dalam komentar
+    ini. XML melarangnya, dan peramban yang memuat SVG sebagai gambar atau
+    favicon membacanya sebagai XML ketat, sehingga seluruh lambang gagal
+    tampil tanpa pesan galat apa pun.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="REINTECH">
+  <defs>
+    <!-- userSpaceOnUse, BUKAN objectBoundingBox bawaan: gradasi bawaan
+         diukur dari kotak pembatas tiap garis, dan garis tegak lurus sempurna
+         (batang huruf R) punya lebar kotak nol, sehingga gradasinya tidak bisa
+         dilukis dan garisnya hilang. Dengan koordinat petak, semua garis juga
+         berbagi satu gradasi yang sama. -->
+    <linearGradient id="rt-grad" gradientUnits="userSpaceOnUse" x1="24" y1="24" x2="104" y2="104">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="55%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="rt-petak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#101829"/>
+      <stop offset="100%" stop-color="#070b14"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Petak persegi membulat, bukan lingkaran: lingkaran di sekitar huruf
+       inilah yang dulu membuatnya terbaca sebagai nol. -->
+  <rect x="6" y="6" width="116" height="116" rx="30" fill="url(#rt-petak)"/>
+  <rect x="6.75" y="6.75" width="114.5" height="114.5" rx="29.25" fill="none" stroke="url(#rt-grad)" stroke-width="1.5" opacity=".55"/>
+
+  <!-- Huruf R: batang, mangkuk, dan kaki -->
+  <path d="M42 32V96" fill="none" stroke="url(#rt-grad)" stroke-width="16" stroke-linecap="round"/>
+  <path d="M42 32H68a19 19 0 0 1 0 38H42" fill="none" stroke="url(#rt-grad)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 70 88 96" fill="none" stroke="url(#rt-grad)" stroke-width="16" stroke-linecap="round"/>
+</svg>

@@ -51,7 +51,7 @@ class DeveloperSectionController extends Controller
             ]);
         }
 
-        return redirect()->route('developer.sections')->with('success', 'Section updated successfully.');
+        return redirect()->route('admin.sections')->with('success', 'Section updated successfully.');
     }
 
     public function toggle($id)
@@ -67,13 +67,15 @@ class DeveloperSectionController extends Controller
     {
         $validated = $request->validate([
             'counter_value' => 'required|integer|min:0',
-            'suffix'        => 'required|string|max:10',
+            'suffix'        => 'nullable|string|max:10',
+            'auto_key'      => 'nullable|in:' . implode(',', array_keys(HeroStat::OTOMATIS)),
             'label'         => 'required|string|max:50',
             'sort_order'    => 'required|integer',
         ]);
+        $validated['suffix'] = (string) ($validated['suffix'] ?? '');
 
         HeroStat::create($validated);
-        return redirect()->route('developer.sections')->with('success', 'Hero stat added.');
+        return redirect()->route('admin.sections')->with('success', 'Hero stat added.');
     }
 
     public function updateHeroStat(Request $request, $id)
@@ -81,18 +83,20 @@ class DeveloperSectionController extends Controller
         $stat = HeroStat::findOrFail($id);
         $validated = $request->validate([
             'counter_value' => 'required|integer|min:0',
-            'suffix'        => 'required|string|max:10',
+            'suffix'        => 'nullable|string|max:10',
+            'auto_key'      => 'nullable|in:' . implode(',', array_keys(HeroStat::OTOMATIS)),
             'label'         => 'required|string|max:50',
             'sort_order'    => 'required|integer',
         ]);
+        $validated['suffix'] = (string) ($validated['suffix'] ?? '');
         $stat->update($validated);
-        return redirect()->route('developer.sections')->with('success', 'Hero stat updated.');
+        return redirect()->route('admin.sections')->with('success', 'Hero stat updated.');
     }
 
     public function destroyHeroStat($id)
     {
         HeroStat::findOrFail($id)->delete();
-        return redirect()->route('developer.sections')->with('success', 'Hero stat deleted.');
+        return redirect()->route('admin.sections')->with('success', 'Hero stat deleted.');
     }
 
     // ── About Cards CRUD ───────────────────────────────
@@ -100,33 +104,35 @@ class DeveloperSectionController extends Controller
     public function storeAboutCard(Request $request)
     {
         $validated = $request->validate([
-            'icon'        => 'required|string|max:20',
+            'icon'        => 'nullable|string|max:20',
             'title'       => 'required|string|max:100',
             'description' => 'required|string',
             'sort_order'  => 'required|integer',
         ]);
+        $validated['icon'] = (string) ($validated['icon'] ?? '');
 
         AboutCard::create($validated);
-        return redirect()->route('developer.sections')->with('success', 'About card added.');
+        return redirect()->route('admin.sections')->with('success', 'About card added.');
     }
 
     public function updateAboutCard(Request $request, $id)
     {
         $card = AboutCard::findOrFail($id);
         $validated = $request->validate([
-            'icon'        => 'required|string|max:20',
+            'icon'        => 'nullable|string|max:20',
             'title'       => 'required|string|max:100',
             'description' => 'required|string',
             'sort_order'  => 'required|integer',
         ]);
+        $validated['icon'] = (string) ($validated['icon'] ?? '');
         $card->update($validated);
-        return redirect()->route('developer.sections')->with('success', 'About card updated.');
+        return redirect()->route('admin.sections')->with('success', 'About card updated.');
     }
 
     public function destroyAboutCard($id)
     {
         AboutCard::findOrFail($id)->delete();
-        return redirect()->route('developer.sections')->with('success', 'About card deleted.');
+        return redirect()->route('admin.sections')->with('success', 'About card deleted.');
     }
 
     // ── Service Items CRUD ─────────────────────────────
@@ -134,34 +140,36 @@ class DeveloperSectionController extends Controller
     public function storeServiceItem(Request $request)
     {
         $validated = $request->validate([
-            'icon'        => 'required|string|max:20',
+            'icon'        => 'nullable|string|max:20',
             'title'       => 'required|string|max:100',
             'description' => 'required|string',
             'price_text'  => 'nullable|string|max:100',
             'sort_order'  => 'required|integer',
         ]);
+        $validated['icon'] = (string) ($validated['icon'] ?? '');
 
         ServiceItem::create($validated);
-        return redirect()->route('developer.sections')->with('success', 'Service item added.');
+        return redirect()->route('admin.sections')->with('success', 'Service item added.');
     }
 
     public function updateServiceItem(Request $request, $id)
     {
         $item = ServiceItem::findOrFail($id);
         $validated = $request->validate([
-            'icon'        => 'required|string|max:20',
+            'icon'        => 'nullable|string|max:20',
             'title'       => 'required|string|max:100',
             'description' => 'required|string',
             'price_text'  => 'nullable|string|max:100',
             'sort_order'  => 'required|integer',
         ]);
+        $validated['icon'] = (string) ($validated['icon'] ?? '');
         $item->update($validated);
-        return redirect()->route('developer.sections')->with('success', 'Service item updated.');
+        return redirect()->route('admin.sections')->with('success', 'Service item updated.');
     }
 
     public function destroyServiceItem($id)
     {
         ServiceItem::findOrFail($id)->delete();
-        return redirect()->route('developer.sections')->with('success', 'Service item deleted.');
+        return redirect()->route('admin.sections')->with('success', 'Service item deleted.');
     }
 }

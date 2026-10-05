@@ -40,6 +40,6 @@ class DeveloperSettingsController extends Controller
 
         session(['developer_name' => $developer->name]);
 
-        return redirect()->route('developer.settings')->with('success', 'Settings updated successfully.');
+        return redirect()->route('admin.settings')->with('success', 'Settings updated successfully.');
     }
 }
